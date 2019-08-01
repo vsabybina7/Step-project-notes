@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+
+    <title>Document</title>
+</head>
+<body>
+
+<div class="container">
+    <!-- Ряд -->
+    <div class="row mt-5">
+        <!-- Колонка -->
+        <div class="col-6">
+            <!-- Заголовок -->
+            <h2>
+                <span class="badge badge-secondary">Notes List</span>
+            </h2>
+        </div>
+        <!-- Колонка -->
+        <div class="col-6 text-right">
+            <!-- Кнопка добавления -->
+            <button type="button" id="addButton" class="btn btn-success">Add note</button>
+        </div>
+    </div>
+
+    <div class="row mt-5" id="notesList">
+        <!-- Вывод списка заметок -->
+        <% notes.forEach((el)=>{ %>
+            <div class="col-4">
+                <div class="card bg-warning">
+                    <div class="card-body " data-id="<%= el.id %>">
+                        <div class="text-right">
+                            <button type="button" data-id="<%= el.id %>" class="btn btn-danger">-</button>
+                        </div>
+                        <h5 class="card-title"><%= el.title %></h5>
+                        <p class="card-text bg-warning"><%= el.text %></p>
+                        <button class="btn btn-success edit-btn" data-id="<%= el.id %>">Edit</button>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+        <!-- Шаблон карточки редактирования -->
+
+    </div>
+</div>
+<script src="/js/index.js"></script>
+</body>
+</html>
+
+</body>
+</html>
