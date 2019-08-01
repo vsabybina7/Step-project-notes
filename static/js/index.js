@@ -15,9 +15,18 @@
 
 //Находим кнопку добавления новой заметки
 let createBtn = document.getElementById('addButton')
+let createListBtn = document.getElementById('addListButton')
 //Находим улемент списк заметок
 let notesList = document.getElementById('notesList')
 //По клику на кнопку добавление новой заметки
+
+createListBtn.addEventListener('click', () => {
+    let id = Date.now()
+    notesList.appendChild(getListTemplate(id, "", "", true))
+
+    getCardBody(id).setAttribute('data-created', 'false')
+})
+
 createBtn.addEventListener('click', ()=>{
     // Список добавляем новую карточку с инпутами
 
@@ -81,8 +90,9 @@ async function createNote(id){
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
         currentCol.innerHTML = newCol.innerHTML
     }
-
 }
+
+
 
 async function editNote(id){
     let data = {
@@ -172,6 +182,67 @@ function getCardTemplate( id, title, text, editStatus){
     wrapper.innerHTML = cardContainer
     return wrapper
 }
+
+
+function getListTemplate( id, title, text, editStatus){
+
+    const inputElems = `
+
+        <div class="form-group">
+            <label for="note-title">Title</label>
+            <input type="text" class="form-control" id="note-title" value="${title}">
+        </div>
+        <div class="form-group">
+            <label for="note-text">Text</label>
+            <textarea class="form-control" id="note-text" rows="3" >${text}</textarea>
+        </div>`
+    const textElems = `
+            <h5 class="card-title">${title}</h5>
+            <p class="card-text">${text}</p>`
+
+    let submitBtn,
+        neededContentElems
+
+    if(editStatus){
+        submitBtn = `<button class="btn btn-primary save-btn" data-id="${id}">Save</button>`
+        neededContentElems = inputElems
+    } else{
+        submitBtn = `<button class="btn btn-success edit-btn" data-id="${id}">Edit</button>`
+        neededContentElems = textElems
+    }
+
+
+    const cardContainer = `
+            <div class="card" id="cardContainer">
+                <div class="card-body bg-warning" data-id="${id}">
+                    <div class="text-right">
+                        <button type="button" data-id="${id}" class="btn btn-danger">-</button>
+                    </div>
+                    ${neededContentElems}
+                    ${submitBtn}
+                </div>
+            </div>`
+
+
+
+    // addInputBtn.addEventListener('click', function () {
+        //     console.log('helo');
+        // })
+
+
+    const wrapper = document.createElement('div')
+    wrapper.className = 'col-4'
+    wrapper.innerHTML = cardContainer
+    wrapper.appendChild(plus)
+    // const container = document.getElementById('cardContainer')
+    // container.appendChild(plus)
+
+    return wrapper
+}
+
+let plus = document.createElement('button')
+plus.innerHTML = '+'
+plus.id = 'testid'
 
 function getTitleVal(id, editStatus){
     const tag = editStatus ? "input" : "h5"

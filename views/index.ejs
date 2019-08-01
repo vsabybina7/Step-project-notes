@@ -25,6 +25,7 @@
         <div class="col-6 text-right">
             <!-- Кнопка добавления -->
             <button type="button" id="addButton" class="btn btn-success">Add note</button>
+            <button type="button" id="addListButton" class="btn btn-success">Add list</button>
         </div>
     </div>
 
@@ -32,6 +33,7 @@
         <!-- Вывод списка заметок -->
         <% notes.forEach((el)=>{ %>
             <div class="col-4">
+                <h1></h1>
                 <div class="card bg-warning">
                     <div class="card-body " data-id="<%= el.id %>">
                         <div class="text-right">
@@ -47,6 +49,7 @@
         <!-- Шаблон карточки редактирования -->
 
     </div>
+
 </div>
 <script src="/js/index.js"></script>
 </body>
