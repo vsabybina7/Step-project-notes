@@ -1,1 +1,2 @@
-const c = 1;
+const c = 0;
+console.log(hi);
