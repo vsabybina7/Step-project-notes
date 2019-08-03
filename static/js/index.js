@@ -13,6 +13,8 @@
 //     </div>
 // </div>`
 
+console.log('pull testing');
+
 //Находим кнопку добавления новой заметки
 let createBtn = document.getElementById('addButton')
 
