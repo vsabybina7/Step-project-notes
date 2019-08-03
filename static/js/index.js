@@ -41,17 +41,7 @@ addListBtn.addEventListener('click', ()=>{
 
     getCardBody(id).setAttribute('data-created', 'false')
 
-    // plusInput()
-})
-
-document.addEventListener('click', plusInput)
-
-function plusInput () {
-    const checkPlus = document.createElement('button')
-    // checkPlus.id = 'checkPlus'
-    checkPlus.innerHTML = '+'
-    let buttonArea = document.getElementById('buttonsArea')
-    buttonArea.appendChild(checkPlus)
+    const checkPlus = document.getElementById('checkPlus')
 
     let count = 1
     checkPlus.addEventListener('click', () => {
@@ -98,7 +88,8 @@ function plusInput () {
 
 
     })
-}
+
+})
 
 //Слушатель нажатия на кнопку
 notesList.addEventListener('click', function(e) {
@@ -279,18 +270,18 @@ function getCardTemplateList( id, title, text, editStatus){
             <div class="my-1 mr-2" >
                 <label for="note-title">Title</label>
                 <input type="text" class="form-control" id="note-title" value="${title}">
-               
+                 
             </div>
            
             <div id="listField"></div> 
              
-            <div id="buttonsArea" class="custom-control custom-checkbox my-1 mr-sm-2">
+            <div class="custom-control custom-checkbox my-1 mr-sm-2">
             
                 <input type="checkbox" class="custom-control-input" id="id">
                 <label class="custom-control-label" for="id">
                     <input class="form-control" id="note-text" data-set="set0" name="value[]">
                     <button class="badge badge-primary"> - </button>
-                    <!--<button class="badge badge-primary text-right" id="checkPlus"> + </button>-->
+                    <button class="badge badge-primary text-right" id="checkPlus"> + </button>
                 </label>
             </div>                
 </div>
@@ -326,4 +317,3 @@ function getCardTemplateList( id, title, text, editStatus){
     wrapper.innerHTML = cardContainer
     return wrapper
 }
-
