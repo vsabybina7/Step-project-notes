@@ -13,8 +13,6 @@
 //     </div>
 // </div>`
 
-console.log('pull testing');
-
 //Находим кнопку добавления новой заметки
 let createBtn = document.getElementById('addButton')
 
@@ -43,53 +41,55 @@ addListBtn.addEventListener('click', ()=>{
 
     getCardBody(id).setAttribute('data-created', 'false')
 
-    const checkPlus = document.getElementById('checkPlus')
+    // const checkPlus = document.getElementById('checkPlus')
+    // const checkPlus = document.createElement('button')
+    // checkPlus.innerText = ' + '
 
     let count = 1
-    checkPlus.addEventListener('click', () => {
+    // checkPlus.addEventListener('click', () => {
         // const divForm = document.getElementById('divForm')
 
-        const divForInputs = document.querySelector('#listField')
-        divForInputs.className = "custom-control custom-checkbox my-1 mr-sm-2"
+        // const divForInputs = document.querySelector('#listField')
+        // divForInputs.className = "custom-control custom-checkbox my-1 mr-sm-2"
+        //
+        // const creatInput = document.createElement('input')
+        // creatInput.type = 'checkbox'
+        // divForInputs.appendChild(creatInput)
+        // // creatInput.className = ''
+        // creatInput.name = 'name'
+        // creatInput.value = 'value'
+        // // creatInput.id = 'id' + count
+        // divForInputs.appendChild(creatInput)
+        //
+        // const labelForInput = document.createElement('label')
+        // // labelForInput.className = ''
+        // // labelForInput.htmlFor = 'id' + count
+        // labelForInput.appendChild(document.createTextNode(''));
+        //
+        // const inputForLabel = document.createElement('input')
+        // inputForLabel.className = "form-control"
+        // inputForLabel.type = 'text'
+        // inputForLabel.setAttribute('data-set', 'set' + count)
+        // inputForLabel.name = 'value[]'
+        //
+        // labelForInput.appendChild(inputForLabel)
+        // divForInputs.appendChild(labelForInput)
+        //
+        // const buttonDelete = document.createElement('button')
+        // buttonDelete.className = 'badge badge-primary'
+        // buttonDelete.innerText = " - "
+        // labelForInput.appendChild(buttonDelete)
+        //
+        // count ++
+        // buttonDelete.addEventListener('click', (e) => {
+        //     if(e.target) {
+        //         creatInput.remove()
+        //         labelForInput.remove()
+        //     }
+        // })
 
-        const creatInput = document.createElement('input')
-        creatInput.type = 'checkbox'
-        divForInputs.appendChild(creatInput)
-        creatInput.className = ''
-        creatInput.name = 'name'
-        creatInput.value = 'value'
-        creatInput.id = 'id' + count
-        divForInputs.appendChild(creatInput)
 
-        const labelForInput = document.createElement('label')
-        labelForInput.className = ''
-        labelForInput.htmlFor = 'id' + count
-        labelForInput.appendChild(document.createTextNode(''));
-
-        const inputForLabel = document.createElement('input')
-        inputForLabel.className = "form-control"
-        inputForLabel.type = 'text'
-        inputForLabel.setAttribute('data-set', 'set' + count)
-        inputForLabel.name = 'value[]'
-
-        labelForInput.appendChild(inputForLabel)
-        divForInputs.appendChild(labelForInput)
-
-        const buttonDelete = document.createElement('button')
-        buttonDelete.className = 'badge badge-primary'
-        buttonDelete.innerText = " - "
-        labelForInput.appendChild(buttonDelete)
-
-        count ++
-        buttonDelete.addEventListener('click', (e) => {
-            if(e.target) {
-                creatInput.remove()
-                labelForInput.remove()
-            }
-        })
-
-
-    })
+    // })
 
 })
 
@@ -118,7 +118,6 @@ notesList.addEventListener('click', function(e) {
         if (e.target.dataset.created !== "false"){
             window.location.href = `/${id}`
         }
-
     }
 })
 
@@ -265,7 +264,7 @@ function getCardBody(id){
 
 
 // функции для добавления карточек со списком
-function getCardTemplateList( id, title, text, editStatus){
+function getCardTemplateList(id, title, text, editStatus){
 
     const inputElems = `
 <div class="form-inline">
@@ -286,8 +285,7 @@ function getCardTemplateList( id, title, text, editStatus){
                     <button class="badge badge-primary text-right" id="checkPlus"> + </button>
                 </label>
             </div>                
-</div>
-`
+</div>`
     const textElems = `
             <h5 class="card-title">${title}</h5>
             <p class="card-text">${text}</p>`
@@ -319,3 +317,55 @@ function getCardTemplateList( id, title, text, editStatus){
     wrapper.innerHTML = cardContainer
     return wrapper
 }
+
+
+document.addEventListener('click',(event)=>{
+    if(event.target.id === 'checkPlus'){
+
+
+
+        const parent = event.target.closest('.card');
+
+        let count = 1;
+        console.log(parent);
+
+        const divForInputs =parent.querySelector('#listField')
+        divForInputs.className = "custom-control custom-checkbox my-1 mr-sm-2"
+
+        const creatInput = document.createElement('input')
+        creatInput.type = 'checkbox'
+        divForInputs.appendChild(creatInput)
+        // creatInput.className = ''
+        creatInput.name = 'name'
+        creatInput.value = 'value'
+        // creatInput.id = 'id' + count
+        divForInputs.appendChild(creatInput)
+
+        const labelForInput = document.createElement('label')
+        // labelForInput.className = ''
+        // labelForInput.htmlFor = 'id' + count
+        labelForInput.appendChild(document.createTextNode(''));
+
+        const inputForLabel = document.createElement('input')
+        inputForLabel.className = "form-control"
+        inputForLabel.type = 'text'
+        inputForLabel.setAttribute('data-set', 'set' + count)
+        inputForLabel.name = 'value[]'
+
+        labelForInput.appendChild(inputForLabel)
+        divForInputs.appendChild(labelForInput)
+
+        const buttonDelete = document.createElement('button')
+        buttonDelete.className = 'badge badge-primary'
+        buttonDelete.innerText = " - "
+        labelForInput.appendChild(buttonDelete)
+
+        count ++
+        buttonDelete.addEventListener('click', (e) => {
+            if(e.target) {
+                creatInput.remove()
+                labelForInput.remove()
+            }
+        })
+    }
+})
