@@ -38,6 +38,8 @@ app.get("/", async (req, res)=>{
 
 })
 
+
+
 app.post("/delete", async (req, res) => {
     // Выводим данные запроса
     console.log(req.body.id)

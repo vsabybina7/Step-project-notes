@@ -23,7 +23,7 @@
         </div>
         <!-- Колонка -->
         <div class="col-6 text-right">
-            <!-- Кнопка добавления -->
+            <!-- Кнопки добавления -->
             <button type="button" id="addButton" class="btn btn-success">Add note</button>
             <button type="button" id="addList" class="btn btn-success">Add list</button>
         </div>
@@ -40,17 +40,19 @@
                         </div>
                         <h5 class="card-title"><%= el.title %></h5>
                         <p class="card-text bg-warning"><%= el.text %></p>
+
                         <button class="btn btn-success edit-btn" data-id="<%= el.id %>">Edit</button>
                     </div>
                 </div>
             </div>
-        <% }) %>
-        <!-- Шаблон карточки редактирования -->
 
+        <% }) %>
     </div>
 
 </div>
+
 <script src="/js/index.js"></script>
+<!--<script src="/js/index_2.js"></script>-->
+
 </body>
 </html>
-
