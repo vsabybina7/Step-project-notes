@@ -203,6 +203,7 @@ function getTextVal(id, editStatus){
 
 function getCol(id){
     return document.querySelector(`.card-body[data-id="${id}"]`).parentNode.parentNode
+    // console.log(id);
 }
 
 function getCardBody(id){
@@ -275,7 +276,7 @@ document.addEventListener('click',(event)=>{
         let count = 1;
         console.log(parent);
 
-        const divForInputs =parent.querySelector('#listField')
+        const divForInputs = parent.querySelector('#listField')
         divForInputs.className = "custom-control custom-checkbox my-1 mr-sm-2"
 
         const creatInput = document.createElement('input')
