@@ -83,7 +83,6 @@ async function createNote(id){
         console.log(newCol);
         console.log(newColList);
         if (newCol) {
-
         currentCol.innerHTML = newCol.innerHTML
         } else {
             currentCol.innerHTML = newColList.innerHTML
