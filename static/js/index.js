@@ -38,7 +38,7 @@ notesList.addEventListener('click', function(e) {
         // console.log('delete')
         deleteNote(id)
     } else if(e.target.classList.contains('save-btn')){
-        // console.log('save')
+        console.log('save')
         if(getCardBody(id).dataset.edit){
             editNote(id)
         } else{
@@ -79,7 +79,16 @@ async function createNote(id){
     if(answer.created){
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
+        let newColList = getCardTemplateList(data.id, data.title, data.text, false)
+        console.log(newCol);
+        console.log(newColList);
+        if (newCol) {
+
         currentCol.innerHTML = newCol.innerHTML
+        } else {
+            currentCol.innerHTML = newColList.innerHTML
+
+        }
     }
 
 }
@@ -144,6 +153,8 @@ function getCardTemplate( id, title, text, editStatus){
             <h5 class="card-title">${title}</h5>
             <p class="card-text">${text}</p>`
 
+    console.log(`"card" ${text}`);
+
     let submitBtn,
         neededContentElems
 
@@ -174,6 +185,9 @@ function getCardTemplate( id, title, text, editStatus){
 function getTitleVal(id, editStatus){
     const tag = editStatus ? "input" : "h5"
     const elem = document.querySelector(`.card-body[data-id="${id}"] ${tag}`)
+
+    console.log(`'title is' ${elem.value}`);
+
     if(editStatus){
         return elem.value
     } else{
@@ -184,8 +198,13 @@ function getTitleVal(id, editStatus){
 function getTextVal(id, editStatus){
     const tag = editStatus ? "textarea" : "p"
     const elem = document.querySelector(`.card-body[data-id="${id}"] ${tag}`)
+
     const tagList = editStatus ? "input" : "p"
     const elemList = document.querySelector(`.card-body[data-id="${id}"] ${tagList}`)
+
+    // console.log(`'text area:' ${elem.value}`);
+    console.log(`'inputs text' ${elemList.value}`);
+
     if(editStatus){
         if (elem) {
             return elem.value
@@ -217,8 +236,7 @@ function getCardTemplateList(id, title, text, editStatus){
 <div class="form-inline">
             <div class="my-1 mr-2" >
                 <label for="note-title">Title</label>
-                <input type="text" class="form-control" id="note-title" value="${title}">
-                 
+                <input type="text" class="form-control" id="note-title" value="${title}">      
             </div>
            
             <div id="listField"></div> 
@@ -233,6 +251,8 @@ function getCardTemplateList(id, title, text, editStatus){
                 </label>
             </div>                
 </div>`
+    console.log(`"list" ${text}`);
+
     const textElems = `
             <h5 class="card-title">${title}</h5>
             <p class="card-text">${text}</p>`
