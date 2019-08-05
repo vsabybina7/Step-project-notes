@@ -201,16 +201,6 @@ function getTextVal(id, editStatus){
     }
 }
 
-function getIputListVal(id, editStatus){
-    const tag = editStatus ? "input" : "p"
-    const elem = document.querySelector(`.card-body[data-id="${id}"] ${tag}`)
-    if(editStatus){
-        return elem.value
-    } else{
-        return elem.innerText
-    }
-}
-
 function getCol(id){
     return document.querySelector(`.card-body[data-id="${id}"]`).parentNode.parentNode
 }
