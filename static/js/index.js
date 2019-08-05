@@ -48,7 +48,15 @@ notesList.addEventListener('click', function(e) {
         console.log('edit')
         let currentCol = getCol(id)
         let newCol = getCardTemplate(id, getTitleVal(id, false), getTextVal(id, false), true)
+
+        if(newCol){
         currentCol.innerHTML = newCol.innerHTML
+        } else {
+            newCol = getCardTemplateList(id, getTitleVal(id, false), getTextVal(id, false), true)
+            currentCol.innerHTML=newCol.innerHTML
+        }
+
+
         getCardBody(id).setAttribute("data-edit", "true");
     } else if (e.target.classList.contains('card-body')) {
 
@@ -79,7 +87,13 @@ async function createNote(id){
     if(answer.created){
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
-        currentCol.innerHTML = newCol.innerHTML
+        let newColList = getCardTemplateList(data.id, data.title, data.text, false)
+
+        if (newCol){
+            currentCol.innerHTML= newCol.innerHTML
+        }else {
+            currentCol.innerHTML = newColList.innerHTML
+        }
     }
 
 }
@@ -104,7 +118,14 @@ async function editNote(id){
     if(answer.edited){
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
+
+        if(newCol){
+            currentCol.innerHTML = newCol.innerHTML
+        }else {
+            newCol = getCardTemplateList(data.id, data.title, data.text, false)
         currentCol.innerHTML = newCol.innerHTML
+        }
+
     }
 }
 
@@ -184,7 +205,7 @@ function getTitleVal(id, editStatus){
 function getTextVal(id, editStatus){
     const tag = editStatus ? "textarea" : "p"
     const elem = document.querySelector(`.card-body[data-id="${id}"] ${tag}`)
-    const tagList = editStatus ? "input" : "p"
+    const tagList = editStatus ? "#inputText" : "p"
     const elemList = document.querySelector(`.card-body[data-id="${id}"] ${tagList}`)
     if(editStatus){
         if (elem) {
@@ -228,7 +249,7 @@ function getCardTemplateList(id, title, text, editStatus){
             
                 <input type="checkbox" class="custom-control-input" id="id">
                 <label class="custom-control-label" for="id">
-                    <input class="form-control" id="note-text" data-set="set0" name="value[]" value="${text}">
+                    <input class="form-control" id="inputText" data-set="" name="value[]" value="${text}">
                     <button class="badge badge-primary"> - </button>
                     <button class="badge badge-primary text-right" id="checkPlus"> + </button>
                 </label>
