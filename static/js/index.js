@@ -50,7 +50,8 @@ notesList.addEventListener('click', function(e) {
         let newCol = getCardTemplate(id, getTitleVal(id, false), getTextVal(id, false), true)
         currentCol.innerHTML = newCol.innerHTML
         getCardBody(id).setAttribute("data-edit", "true");
-    } else if (e.target.classList.contains('card-body')) {
+    }
+    else if (e.target.classList.contains('card-body')) {
 
         if (e.target.dataset.created !== "false"){
             window.location.href = `/${id}`
@@ -59,11 +60,11 @@ notesList.addEventListener('click', function(e) {
 })
 
 // Функция создания заметки
-async function createNote(id){
+async function createNote(id, set){
     let data = {
         id: id,
         title: getTitleVal(id, true),
-        text: getTextVal(id, true)
+        text: getTextVal(id, set, true)
     }
     console.log(data)
     let req = await fetch("http://localhost:3000/create", {
@@ -77,9 +78,18 @@ async function createNote(id){
     let answer = await req.json()
     console.log(answer)
     if(answer.created){
+
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
-        currentCol.innerHTML = newCol.innerHTML
+
+        let newColList = getCardTemplateList(data.id, data.title, data.text, false)
+
+        if (newCol) {
+            currentCol.innerHTML = newCol.innerHTML
+        } else {
+            currentCol.innerHTML = newColList.innerHTML
+        }
+
     }
 
 }
@@ -181,21 +191,44 @@ function getTitleVal(id, editStatus){
     }
 }
 
-function getTextVal(id, editStatus){
+// function getTextVal(id, editStatus){
+//     const tag = editStatus ? "textarea" : "p"
+//     const elem = document.querySelector(`.card-body[data-id="${id}"] ${tag}`)
+//
+//     const tagList = editStatus ? "input" : "p"
+//     const elemList = document.querySelector(`.card-body[data-id="${id}"] ${tagList}`)
+//     if(editStatus){
+//         if (elem) {
+//             return elem.value
+//         } else {
+//             return elemList.value
+//         }
+//     } else{
+//         if (elem) {
+//             return elem.innerText
+//         } else {
+//             return elemList.innerText
+//         }
+//     }
+// }
+
+function getTextVal(id, set, editStatus){
     const tag = editStatus ? "textarea" : "p"
     const elem = document.querySelector(`.card-body[data-id="${id}"] ${tag}`)
+
     const tagList = editStatus ? "input" : "p"
-    const elemList = document.querySelector(`.card-body[data-id="${id}"] ${tagList}`)
-    if(editStatus){
-        if (elem) {
+    const elemList = document.querySelector(`.card-body[data-set="${set}"] ${tagList}`)
+    if(elem) {
+
+        if(editStatus){
             return elem.value
-        } else {
-            return elemList.value
-        }
-    } else{
-        if (elem) {
+        } else{
             return elem.innerText
-        } else {
+        }
+    } else {
+        if(editStatus){
+            return elemList.value
+        } else{
             return elemList.innerText
         }
     }
@@ -228,7 +261,7 @@ function getCardTemplateList(id, title, text, editStatus){
             
                 <input type="checkbox" class="custom-control-input" id="id">
                 <label class="custom-control-label" for="id">
-                    <input class="form-control" id="note-text" data-set="set0" name="value[]" value="${text}">
+                    <input class="form-control" id="note-text" data-set="set" value="${text}">
                     <button class="badge badge-primary"> - </button>
                     <button class="badge badge-primary text-right" id="checkPlus"> + </button>
                 </label>

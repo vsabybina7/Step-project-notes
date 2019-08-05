@@ -34,7 +34,7 @@
         <% notes.forEach((el, elem)=>{ %>
             <div class="col-4">
                 <div class="card bg-warning">
-                    <div class="card-body " data-id="<%= el.id %>" data-list="<%= elem.list %>" >
+                    <div class="card-body " data-id="<%= el.id %>" data-set="<%= el.set %>" >
                         <div class="text-right">
                             <button type="button" data-id="<%= el.id %>" data-list="<%= elem.list %>" class="btn btn-danger">-</button>
                         </div>
@@ -44,7 +44,7 @@
 
                         <p class="card-text list-text bg-warning"><%= el.text %></p>
 
-                        <p class="list-text bg-warning"><%= elem.text %></p>
+                        <p class="list-text bg-warning"><%= el.text %></p>
 
                         <button class="btn btn-success edit-btn" data-id="<%= el.id %>" data-list="<%= elem.list %>">Edit</button>
                     </div>
