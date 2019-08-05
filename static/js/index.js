@@ -1,17 +1,4 @@
-// const cardTemplate = `
-// <div class="card">
-//     <div class="card-body">
-//             <div class="form-group">
-//                 <label for="note-title">Title</label>
-//                 <input type="text" class="form-control" id="note-title">
-//             </div>
-//             <div class="form-group">
-//                 <label for="note-text">Text</label>
-//                 <textarea class="form-control" id="note-text" rows="3"></textarea>
-//             </div>
-//         <button class="btn btn-primary" id="saveBtn">Save</button>
-//     </div>
-// </div>`
+
 
 //Находим кнопку добавления новой заметки
 let createBtn = document.getElementById('addButton')
@@ -41,56 +28,6 @@ addListBtn.addEventListener('click', ()=>{
 
     getCardBody(id).setAttribute('data-created', 'false')
 
-    // const checkPlus = document.getElementById('checkPlus')
-    // const checkPlus = document.createElement('button')
-    // checkPlus.innerText = ' + '
-
-    let count = 1
-    // checkPlus.addEventListener('click', () => {
-        // const divForm = document.getElementById('divForm')
-
-        // const divForInputs = document.querySelector('#listField')
-        // divForInputs.className = "custom-control custom-checkbox my-1 mr-sm-2"
-        //
-        // const creatInput = document.createElement('input')
-        // creatInput.type = 'checkbox'
-        // divForInputs.appendChild(creatInput)
-        // // creatInput.className = ''
-        // creatInput.name = 'name'
-        // creatInput.value = 'value'
-        // // creatInput.id = 'id' + count
-        // divForInputs.appendChild(creatInput)
-        //
-        // const labelForInput = document.createElement('label')
-        // // labelForInput.className = ''
-        // // labelForInput.htmlFor = 'id' + count
-        // labelForInput.appendChild(document.createTextNode(''));
-        //
-        // const inputForLabel = document.createElement('input')
-        // inputForLabel.className = "form-control"
-        // inputForLabel.type = 'text'
-        // inputForLabel.setAttribute('data-set', 'set' + count)
-        // inputForLabel.name = 'value[]'
-        //
-        // labelForInput.appendChild(inputForLabel)
-        // divForInputs.appendChild(labelForInput)
-        //
-        // const buttonDelete = document.createElement('button')
-        // buttonDelete.className = 'badge badge-primary'
-        // buttonDelete.innerText = " - "
-        // labelForInput.appendChild(buttonDelete)
-        //
-        // count ++
-        // buttonDelete.addEventListener('click', (e) => {
-        //     if(e.target) {
-        //         creatInput.remove()
-        //         labelForInput.remove()
-        //     }
-        // })
-
-
-    // })
-
 })
 
 //Слушатель нажатия на кнопку
@@ -98,10 +35,10 @@ notesList.addEventListener('click', function(e) {
     // Обьявляем ай ди заметки
     let id = e.target.dataset.id
     if(e.target.classList.contains('btn-danger')) {
-        console.log('delete')
+        // console.log('delete')
         deleteNote(id)
     } else if(e.target.classList.contains('save-btn')){
-        console.log('save')
+        // console.log('save')
         if(getCardBody(id).dataset.edit){
             editNote(id)
         } else{
@@ -183,7 +120,7 @@ async function deleteNote(id) {
         body: JSON.stringify(data)
     })
     let answer = await req.json()
-    console.log(answer)
+    // console.log(answer)
 
     if(answer.deleted){
         let currentCol = getCol(id)
@@ -247,6 +184,26 @@ function getTitleVal(id, editStatus){
 function getTextVal(id, editStatus){
     const tag = editStatus ? "textarea" : "p"
     const elem = document.querySelector(`.card-body[data-id="${id}"] ${tag}`)
+    const tagList = editStatus ? "input" : "p"
+    const elemList = document.querySelector(`.card-body[data-id="${id}"] ${tagList}`)
+    if(editStatus){
+        if (elem) {
+            return elem.value
+        } else {
+            return elemList.value
+        }
+    } else{
+        if (elem) {
+            return elem.innerText
+        } else {
+            return elemList.innerText
+        }
+    }
+}
+
+function getIputListVal(id, editStatus){
+    const tag = editStatus ? "input" : "p"
+    const elem = document.querySelector(`.card-body[data-id="${id}"] ${tag}`)
     if(editStatus){
         return elem.value
     } else{
@@ -280,7 +237,7 @@ function getCardTemplateList(id, title, text, editStatus){
             
                 <input type="checkbox" class="custom-control-input" id="id">
                 <label class="custom-control-label" for="id">
-                    <input class="form-control" id="note-text" data-set="set0" name="value[]">
+                    <input class="form-control" id="note-text" data-set="set0" name="value[]" value="${text}">
                     <button class="badge badge-primary"> - </button>
                     <button class="badge badge-primary text-right" id="checkPlus"> + </button>
                 </label>
@@ -320,9 +277,8 @@ function getCardTemplateList(id, title, text, editStatus){
 
 
 document.addEventListener('click',(event)=>{
+
     if(event.target.id === 'checkPlus'){
-
-
 
         const parent = event.target.closest('.card');
 
