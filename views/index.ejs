@@ -31,17 +31,22 @@
 
     <div class="row mt-5" id="notesList">
         <!-- Вывод списка заметок -->
-        <% notes.forEach((el)=>{ %>
+        <% notes.forEach((el, elem)=>{ %>
             <div class="col-4">
                 <div class="card bg-warning">
-                    <div class="card-body " data-id="<%= el.id %>">
+                    <div class="card-body " data-id="<%= el.id %>" data-list="<%= elem.list %>" >
                         <div class="text-right">
-                            <button type="button" data-id="<%= el.id %>" class="btn btn-danger">-</button>
+                            <button type="button" data-id="<%= el.id %>" data-list="<%= elem.list %>" class="btn btn-danger">-</button>
                         </div>
                         <h5 class="card-title"><%= el.title %></h5>
-                        <p class="card-text bg-warning"><%= el.text %></p>
 
-                        <button class="btn btn-success edit-btn" data-id="<%= el.id %>">Edit</button>
+                        <h5 class="card-title"><%= elem.title %></h5>
+
+                        <p class="card-text list-text bg-warning"><%= el.text %></p>
+
+                        <p class="list-text bg-warning"><%= elem.text %></p>
+
+                        <button class="btn btn-success edit-btn" data-id="<%= el.id %>" data-list="<%= elem.list %>">Edit</button>
                     </div>
                 </div>
             </div>

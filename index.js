@@ -38,6 +38,17 @@ app.get("/", async (req, res)=>{
 
 })
 
+app.get("/", async (req, res)=>{
+    let notes = []
+    await app.db.find({}).forEach((elem) => {
+        notes.push(elem)
+    });
+    console.log(notes);
+    res.render("index", {notes})
+
+
+})
+
 
 
 app.post("/delete", async (req, res) => {
