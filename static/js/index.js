@@ -36,40 +36,49 @@ addListBtn.addEventListener('click', ()=>{
 notesList.addEventListener('click', function(e) {
     // Обьявляем ай ди заметки
     let id = e.target.dataset.id
-    console.log(id);
+    // console.log(id);
     if(e.target.classList.contains('btn-danger')) {
         // console.log('delete')
         deleteNote(id)
-    } else if(e.target.classList.contains('save-btn')){
-        console.log('save')
+    }
+    // else if (e.target.classList.contains('save-btn-list')) {
+    //
+    // }
+    else if(e.target.classList.contains('save-btn')){
+        // console.log('save')
         if(getCardBody(id).dataset.edit){
-            editNote(id)
+            editNote(id, event.target)
         } else{
-            createNote(id)
+            createNote(id, event.target)
         }
     } else if(e.target.classList.contains('edit-btn')) {
-
-        console.log('edit')
         let currentCol = getCol(id)
-        // currentCol.innerHTML = newCol.innerHTML
-        // currentCol.innerHTML = newColList.innerHTML
-
-        let newCol = getCardTemplate(id, getTitleVal(id, false), getTextVal(id, false), true);
+        let newCol = getCardTemplate(data.id, data.title, data.text, false)
         currentCol.innerHTML = newCol.innerHTML
-
-        // let listClass = document.querySelectorAll('.listClass')
-        // console.log(listClass);
-        // if (document.querySelectorAll('.listClass')) {
+        // const isList = elem.attributes.class.value.split(' ').includes('save-btn-list');
         //
-        //     let newColList = getCardTemplateList(id, getTitleVal(id, false), getTextVal(id, false), true);
+        // let currentCol = getCol(id)
+        // let newCol = getCardTemplate(data.id, data.title, data.text, false)
+        // let newColList = getCardTemplateList(data.id, data.title, data.text, false)
+        //
+        // if (isList) {
         //     currentCol.innerHTML = newColList.innerHTML
-        //
         // } else {
-        //     let newCol = getCardTemplate(id, getTitleVal(id, false), getTextVal(id, false), true);
         //     currentCol.innerHTML = newCol.innerHTML
+        //
         // }
+
+
         getCardBody(id).setAttribute("data-edit", "true");
-    } else if (e.target.classList.contains('card-body')) {
+    }
+    else if (e.target.classList.contains('edit-btn-list')) {
+        let currentCol = getCol(id)
+        let newColList = getCardTemplateList(data.id, data.title, data.text, false)
+        currentCol.innerHTML = newColList.innerHTML
+        getCardBody(id).setAttribute("data-edit", "true");
+
+    }
+    else if (e.target.classList.contains('card-body')) {
 
         if (e.target.dataset.created !== "false") {
             window.location.href = `/${id}`
@@ -79,13 +88,13 @@ notesList.addEventListener('click', function(e) {
 })
 
 // Функция создания заметки
-async function createNote(id){
+async function createNote(id, elem){
     let data = {
         id: id,
         title: getTitleVal(id, true),
         text: getTextVal(id, true)
     }
-    console.log(data)
+    // console.log(data)
     let req = await fetch("http://localhost:3000/create", {
         method: "POST",
         headers: {
@@ -93,32 +102,32 @@ async function createNote(id){
         },
         body: JSON.stringify(data)
     })
+    const isList = elem.attributes.class.value.split(' ').includes('save-btn-list');
 
     let answer = await req.json()
-    console.log(answer)
+    // console.log(answer)
     if(answer.created){
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
         let newColList = getCardTemplateList(data.id, data.title, data.text, false)
+        // currentCol.innerHTML = newCol.innerHTML
 
-        let listClass = document.querySelectorAll('.listClass')
-        console.log(listClass);
-        if (listClass) {
+        // console.log(listClass);
+        if (isList) {
             currentCol.innerHTML = newColList.innerHTML
         } else {
-
+            currentCol.innerHTML = newCol.innerHTML
 
         }
     }
 }
 
-async function editNote(id){
+async function editNote(id, elem){
     let data = {
         id: id,
         title: getTitleVal(id, true),
         text: getTextVal(id, true)
     }
-    console.log(data)
     let req = await fetch("http://localhost:3000/edit", {
         method: "POST",
         headers: {
@@ -126,18 +135,17 @@ async function editNote(id){
         },
         body: JSON.stringify(data)
     })
-
     let answer = await req.json()
-    console.log(answer)
+    // console.log(answer)
+    const isList = elem.attributes.class.value.split(' ').includes('save-btn-list');
+
     if(answer.edited) {
+
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
-
         let newColList = getCardTemplateList(data.id, data.title, data.text, false)
 
-        let listClass = document.querySelectorAll('.listClass')
-        console.log(listClass);
-        if (listClass) {
+        if (isList) {
             currentCol.innerHTML = newColList.innerHTML
         } else {
             currentCol.innerHTML = newCol.innerHTML
@@ -182,7 +190,7 @@ function getCardTemplate( id, title, text, editStatus){
             <h5 class="card-title">${title}</h5>
             <p class="card-text">${text}</p>`
 
-    console.log(`"card" ${text}`);
+    // console.log(`"card" ${text}`);
 
     let submitBtn,
         neededContentElems
@@ -191,7 +199,7 @@ function getCardTemplate( id, title, text, editStatus){
         submitBtn = `<button class="btn btn-primary save-btn" data-id="${id}">Save</button>`
         neededContentElems = inputElems
     } else{
-        submitBtn = `<button class="btn btn-success edit-btn" data-id="${id}">Edit</button>`
+        submitBtn = `<button class="btn btn-success edit-btn testing" data-id="${id}">Edit</button>`
         neededContentElems = textElems
     }
     const cardContainer = `
@@ -215,7 +223,7 @@ function getTitleVal(id, editStatus){
     const tag = editStatus ? "input" : "h5"
     const elem = document.querySelector(`.card-body[data-id="${id}"] ${tag}`)
 
-    console.log(`'title is' ${elem.value}`);
+    // console.log(`'title is' ${elem.value}`);
 
     if(editStatus){
         return elem.value
@@ -278,7 +286,7 @@ function getCardTemplateList(id, title, text, editStatus){
                 </label>
             </div>                
 </div>`
-    console.log(`"list" ${text}`);
+    // console.log(`"list" ${text}`);
 
     const textElems = `
             <h5 class="card-title">${title}</h5>
@@ -288,10 +296,10 @@ function getCardTemplateList(id, title, text, editStatus){
         neededContentElems
 
     if(editStatus){
-        submitBtn = `<button class="btn btn-primary save-btn" data-id="${id}">Save</button>`
+        submitBtn = `<button class="btn btn-primary save-btn save-btn-list" data-id="${id}">Save</button>`
         neededContentElems = inputElems
     } else{
-        submitBtn = `<button class="btn btn-success edit-btn" data-id="${id}">Edit</button>`
+        submitBtn = `<button class="btn btn-success edit-btn edit-btn-list" data-id="${id}">Edit</button>`
         neededContentElems = textElems
     }
     const cardContainer = `
@@ -307,7 +315,7 @@ function getCardTemplateList(id, title, text, editStatus){
             </div>`
 
     const wrapper = document.createElement('div')
-    wrapper.className = 'col-4 , listClass'
+    wrapper.className = 'col-4'
     wrapper.innerHTML = cardContainer
     return wrapper
 }
@@ -320,7 +328,7 @@ document.addEventListener('click',(event)=>{
         const parent = event.target.closest('.card');
 
         let count = 1;
-        console.log(parent);
+        // console.log(parent);
 
         const divForInputs =parent.querySelector('#listField')
         divForInputs.className = "custom-control custom-checkbox my-1 mr-sm-2"
