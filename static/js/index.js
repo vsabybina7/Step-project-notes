@@ -26,6 +26,8 @@ addListBtn.addEventListener('click', ()=>{
     let id = Date.now()
     notesList.appendChild(getCardTemplateList(id, "", "", true))
 
+    // getCardBody(id).className = 'list'
+
     getCardBody(id).setAttribute('data-created', 'false')
 
 })
@@ -48,15 +50,19 @@ notesList.addEventListener('click', function(e) {
     } else if(e.target.classList.contains('edit-btn')) {
         console.log('edit')
         let currentCol = getCol(id)
-        let newCol = getCardTemplate(id, getTitleVal(id, false), getTextVal(id, false), true);
-        currentCol.innerHTML = newCol.innerHTML
-        getCardBody(id).setAttribute("data-edit", "true");
+        // currentCol.innerHTML = newCol.innerHTML
+        // currentCol.innerHTML = newColList.innerHTML
 
-    } else if (e.target.classList.contains('card-body')) {
-
-        if (e.target.dataset.created !== "false"){
-            window.location.href = `/${id}`
+        let listClass = document.querySelectorAll('.listClass')
+        console.log(listClass);
+        if (document.querySelectorAll('.listClass')) {
+            let newColList = getCardTemplateList(id, getTitleVal(id, false), getTextVal(id, false), true);
+            currentCol.innerHTML = newColList.innerHTML
+        } else {
+            let newCol = getCardTemplate(id, getTitleVal(id, false), getTextVal(id, false), true);
+            currentCol.innerHTML = newCol.innerHTML
         }
+        getCardBody(id).setAttribute("data-edit", "true");
     }
 })
 
@@ -83,10 +89,12 @@ async function createNote(id){
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
         let newColList = getCardTemplateList(data.id, data.title, data.text, false)
 
-        if (newCol) {
-            currentCol.innerHTML = newCol.innerHTML
-        } else {
+        let listClass = document.querySelectorAll('.listClass')
+        console.log(listClass);
+        if (listClass) {
             currentCol.innerHTML = newColList.innerHTML
+        } else {
+            currentCol.innerHTML = newCol.innerHTML
 
         }
     }
@@ -110,15 +118,19 @@ async function editNote(id){
 
     let answer = await req.json()
     console.log(answer)
-    if(answer.edited){
+    if(answer.edited) {
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
 
-        if(newCol){
-            currentCol.innerHTML = newCol.innerHTML
+        let newColList = getCardTemplateList(data.id, data.title, data.text, false)
+
+        let listClass = document.querySelectorAll('.listClass')
+        console.log(listClass);
+        if (listClass) {
+            currentCol.innerHTML = newColList.innerHTML
         } else {
-            newCol = getCardTemplateList(data.id, data.title, data.text, false)
             currentCol.innerHTML = newCol.innerHTML
+
         }
     }
 }
@@ -284,7 +296,7 @@ function getCardTemplateList(id, title, text, editStatus){
             </div>`
 
     const wrapper = document.createElement('div')
-    wrapper.className = 'col-4'
+    wrapper.className = 'col-4 , listClass'
     wrapper.innerHTML = cardContainer
     return wrapper
 }
