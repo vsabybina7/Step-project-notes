@@ -26,10 +26,9 @@ addListBtn.addEventListener('click', ()=>{
     let id = Date.now()
     notesList.appendChild(getCardTemplateList(id, "", "", true))
 
-    getCardBody(id).setAttribute('data-created', 'false')
+    // getCardBody(id).className = 'list'
 
-    // getCardBody(id).className += ' , listClass'
-    // getCardBody(id).style.color = 'green'
+    getCardBody(id).setAttribute('data-created', 'false')
 
 })
 
@@ -51,22 +50,21 @@ notesList.addEventListener('click', function(e) {
     } else if(e.target.classList.contains('edit-btn')) {
         console.log('edit')
         let currentCol = getCol(id)
+        // currentCol.innerHTML = newCol.innerHTML
+        // currentCol.innerHTML = newColList.innerHTML
         let newCol = getCardTemplate(id, getTitleVal(id, false), getTextVal(id, false), true);
-        // let newColList = getCardTemplateList(id, getTitleVal(id, false), getTextVal(id, false), true);
-        //
-        // if (e.target.classList.contains('listClass')) {
+        currentCol.innerHTML = newCol.innerHTML
+        // let listClass = document.querySelectorAll('.listClass')
+        // console.log(listClass);
+        // if (document.querySelectorAll('.listClass')) {
+        //     let newColList = getCardTemplateList(id, getTitleVal(id, false), getTextVal(id, false), true);
         //     currentCol.innerHTML = newColList.innerHTML
         // } else {
+        //     let newCol = getCardTemplate(id, getTitleVal(id, false), getTextVal(id, false), true);
         //     currentCol.innerHTML = newCol.innerHTML
         // }
-        currentCol.innerHTML = newCol.innerHTML
+
         getCardBody(id).setAttribute("data-edit", "true");
-
-    } else if (e.target.classList.contains('card-body')) {
-
-        if (e.target.dataset.created !== "false"){
-            window.location.href = `/${id}`
-        }
     }
 })
 
@@ -87,20 +85,22 @@ async function createNote(id){
     })
 
     let answer = await req.json()
-    console.log(answer)
+
+
     if(answer.created){
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
-        // let newColList = getCardTemplateList(id, getTitleVal(id, false), getTextVal(id, false), true);
-        //
-        // let listCards = document.querySelectorAll('.listClass')
-        // console.log(`'this is:'${listCards}`);
-        // if (listCards) {
+        currentCol.innerHTML = newCol.innerHTML
+        let newColList = getCardTemplateList(data.id, data.title, data.text, false)
+        // let listClass = document.querySelector('.listClass')
+        let listClass = document.getElementsByClassName('listClass')
+        console.log(`this is: ${listClass}`);
+        // if (listClass) {
         //     currentCol.innerHTML = newColList.innerHTML
         // } else {
         //     currentCol.innerHTML = newCol.innerHTML
+        //
         // }
-        currentCol.innerHTML = newCol.innerHTML
     }
 
 }
@@ -122,21 +122,20 @@ async function editNote(id){
 
     let answer = await req.json()
     console.log(answer)
-    if(answer.edited){
+    if(answer.edited) {
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
-
-        // let newColList = getCardTemplateList(id, getTitleVal(id, false), getTextVal(id, false), true);
-
-        // let listCards = document.querySelectorAll('.listClass')
-        // console.log(`'this is:'${listCards}`);
+        currentCol.innerHTML = newCol.innerHTML
+        // let newColList = getCardTemplateList(data.id, data.title, data.text, false)
         //
-        // if (listCards) {
+        // let listClass = document.querySelectorAll('.listClass')
+        // console.log(listClass);
+        // if (listClass) {
         //     currentCol.innerHTML = newColList.innerHTML
         // } else {
         //     currentCol.innerHTML = newCol.innerHTML
+        //
         // }
-        currentCol.innerHTML = newCol.innerHTML
     }
 }
 
@@ -190,7 +189,7 @@ function getCardTemplate( id, title, text, editStatus){
     }
     const cardContainer = `
             <div class="card">
-                <div class="card-body bg-warning" data-id="${id}">
+                <div class="card-body bg-warning listClass" data-id="${id}">
                     <div class="text-right">
                         <button type="button" data-id="${id}" class="btn btn-danger">-</button>
                     </div>
@@ -301,7 +300,7 @@ function getCardTemplateList(id, title, text, editStatus){
             </div>`
 
     const wrapper = document.createElement('div')
-    wrapper.className = 'col-4 , listClass'
+    wrapper.className = 'col-4'
     wrapper.innerHTML = cardContainer
     return wrapper
 }
