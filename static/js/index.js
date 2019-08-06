@@ -28,13 +28,16 @@ addListBtn.addEventListener('click', ()=>{
 
     getCardBody(id).setAttribute('data-created', 'false')
 
+    // getCardBody(id).className += ' , listClass'
+    // getCardBody(id).style.color = 'green'
+
 })
 
 //Слушатель нажатия на кнопку (удалить, сохранить, редактировать)
 notesList.addEventListener('click', function(e) {
     // Обьявляем ай ди заметки
     let id = e.target.dataset.id
-    console.log(id);
+    // console.log(id);
     if(e.target.classList.contains('btn-danger')) {
         // console.log('delete')
         deleteNote(id)
@@ -49,6 +52,13 @@ notesList.addEventListener('click', function(e) {
         console.log('edit')
         let currentCol = getCol(id)
         let newCol = getCardTemplate(id, getTitleVal(id, false), getTextVal(id, false), true);
+        // let newColList = getCardTemplateList(id, getTitleVal(id, false), getTextVal(id, false), true);
+        //
+        // if (e.target.classList.contains('listClass')) {
+        //     currentCol.innerHTML = newColList.innerHTML
+        // } else {
+        //     currentCol.innerHTML = newCol.innerHTML
+        // }
         currentCol.innerHTML = newCol.innerHTML
         getCardBody(id).setAttribute("data-edit", "true");
 
@@ -81,14 +91,16 @@ async function createNote(id){
     if(answer.created){
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
-        let newColList = getCardTemplateList(data.id, data.title, data.text, false)
-
-        if (newCol) {
-            currentCol.innerHTML = newCol.innerHTML
-        } else {
-            currentCol.innerHTML = newColList.innerHTML
-
-        }
+        // let newColList = getCardTemplateList(id, getTitleVal(id, false), getTextVal(id, false), true);
+        //
+        // let listCards = document.querySelectorAll('.listClass')
+        // console.log(`'this is:'${listCards}`);
+        // if (listCards) {
+        //     currentCol.innerHTML = newColList.innerHTML
+        // } else {
+        //     currentCol.innerHTML = newCol.innerHTML
+        // }
+        currentCol.innerHTML = newCol.innerHTML
     }
 
 }
@@ -114,12 +126,17 @@ async function editNote(id){
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
 
-        if(newCol){
-            currentCol.innerHTML = newCol.innerHTML
-        } else {
-            newCol = getCardTemplateList(data.id, data.title, data.text, false)
-            currentCol.innerHTML = newCol.innerHTML
-        }
+        // let newColList = getCardTemplateList(id, getTitleVal(id, false), getTextVal(id, false), true);
+
+        // let listCards = document.querySelectorAll('.listClass')
+        // console.log(`'this is:'${listCards}`);
+        //
+        // if (listCards) {
+        //     currentCol.innerHTML = newColList.innerHTML
+        // } else {
+        //     currentCol.innerHTML = newCol.innerHTML
+        // }
+        currentCol.innerHTML = newCol.innerHTML
     }
 }
 
@@ -284,7 +301,7 @@ function getCardTemplateList(id, title, text, editStatus){
             </div>`
 
     const wrapper = document.createElement('div')
-    wrapper.className = 'col-4'
+    wrapper.className = 'col-4 , listClass'
     wrapper.innerHTML = cardContainer
     return wrapper
 }
