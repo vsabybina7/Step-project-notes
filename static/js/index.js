@@ -20,7 +20,7 @@ createBtn.addEventListener('click', ()=>{
     getCardBody(id).setAttribute('data-created', 'false')
 })
 
-//По клику на кнопку добавление нового списка заметок
+//По клику на кнопку добавление нового списка
 addListBtn.addEventListener('click', ()=>{
     // Список добавляем новую карточку с инпутами
     let id = Date.now()
@@ -30,10 +30,11 @@ addListBtn.addEventListener('click', ()=>{
 
 })
 
-//Слушатель нажатия на кнопку
+//Слушатель нажатия на кнопку (удалить, сохранить, редактировать)
 notesList.addEventListener('click', function(e) {
     // Обьявляем ай ди заметки
     let id = e.target.dataset.id
+    console.log(id);
     if(e.target.classList.contains('btn-danger')) {
         // console.log('delete')
         deleteNote(id)
@@ -47,9 +48,10 @@ notesList.addEventListener('click', function(e) {
     } else if(e.target.classList.contains('edit-btn')) {
         console.log('edit')
         let currentCol = getCol(id)
-        let newCol = getCardTemplate(id, getTitleVal(id, false), getTextVal(id, false), true)
+        let newCol = getCardTemplate(id, getTitleVal(id, false), getTextVal(id, false), true);
         currentCol.innerHTML = newCol.innerHTML
         getCardBody(id).setAttribute("data-edit", "true");
+
     } else if (e.target.classList.contains('card-body')) {
 
         if (e.target.dataset.created !== "false"){
@@ -80,10 +82,9 @@ async function createNote(id){
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
         let newColList = getCardTemplateList(data.id, data.title, data.text, false)
-        console.log(newCol);
-        console.log(newColList);
+
         if (newCol) {
-        currentCol.innerHTML = newCol.innerHTML
+            currentCol.innerHTML = newCol.innerHTML
         } else {
             currentCol.innerHTML = newColList.innerHTML
 
@@ -112,7 +113,13 @@ async function editNote(id){
     if(answer.edited){
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
-        currentCol.innerHTML = newCol.innerHTML
+
+        if(newCol){
+            currentCol.innerHTML = newCol.innerHTML
+        } else {
+            newCol = getCardTemplateList(data.id, data.title, data.text, false)
+            currentCol.innerHTML = newCol.innerHTML
+        }
     }
 }
 
@@ -197,12 +204,11 @@ function getTitleVal(id, editStatus){
 function getTextVal(id, editStatus){
     const tag = editStatus ? "textarea" : "p"
     const elem = document.querySelector(`.card-body[data-id="${id}"] ${tag}`)
-
-    const tagList = editStatus ? "input" : "p"
+    const tagList = editStatus ? "#inputText" : "p"
     const elemList = document.querySelector(`.card-body[data-id="${id}"] ${tagList}`)
 
     // console.log(`'text area:' ${elem.value}`);
-    console.log(`'inputs text' ${elemList.value}`);
+    // console.log(`'inputs text' ${elemList.value}`);
 
     if(editStatus){
         if (elem) {
@@ -227,8 +233,7 @@ function getCardBody(id){
     return document.querySelector(`.card-body[data-id="${id}"]`)
 }
 
-
-// функции для добавления карточек со списком
+// функции для добавления карточек с заметками
 function getCardTemplateList(id, title, text, editStatus){
 
     const inputElems = `
@@ -244,7 +249,7 @@ function getCardTemplateList(id, title, text, editStatus){
             
                 <input type="checkbox" class="custom-control-input" id="id">
                 <label class="custom-control-label" for="id">
-                    <input class="form-control" id="note-text" data-set="set0" name="value[]" value="${text}">
+                    <input class="form-control" id = "inputText" data-set="set0" name="value[]" value="${text}">
                     <button class="badge badge-primary"> - </button>
                     <button class="badge badge-primary text-right" id="checkPlus"> + </button>
                 </label>
@@ -284,7 +289,7 @@ function getCardTemplateList(id, title, text, editStatus){
     return wrapper
 }
 
-
+//добавление инпутов для заметок
 document.addEventListener('click',(event)=>{
 
     if(event.target.id === 'checkPlus'){
