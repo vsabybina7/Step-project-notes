@@ -36,7 +36,7 @@ addListBtn.addEventListener('click', ()=>{
 notesList.addEventListener('click', function(e) {
     // Обьявляем ай ди заметки
     let id = e.target.dataset.id
-    // console.log(id);
+    console.log(id);
     if(e.target.classList.contains('btn-danger')) {
         // console.log('delete')
         deleteNote(id)
@@ -48,24 +48,34 @@ notesList.addEventListener('click', function(e) {
             createNote(id)
         }
     } else if(e.target.classList.contains('edit-btn')) {
+
         console.log('edit')
         let currentCol = getCol(id)
         // currentCol.innerHTML = newCol.innerHTML
         // currentCol.innerHTML = newColList.innerHTML
+
         let newCol = getCardTemplate(id, getTitleVal(id, false), getTextVal(id, false), true);
         currentCol.innerHTML = newCol.innerHTML
+
         // let listClass = document.querySelectorAll('.listClass')
         // console.log(listClass);
         // if (document.querySelectorAll('.listClass')) {
+        //
         //     let newColList = getCardTemplateList(id, getTitleVal(id, false), getTextVal(id, false), true);
         //     currentCol.innerHTML = newColList.innerHTML
+        //
         // } else {
         //     let newCol = getCardTemplate(id, getTitleVal(id, false), getTextVal(id, false), true);
         //     currentCol.innerHTML = newCol.innerHTML
         // }
-
         getCardBody(id).setAttribute("data-edit", "true");
+    } else if (e.target.classList.contains('card-body')) {
+
+        if (e.target.dataset.created !== "false") {
+            window.location.href = `/${id}`
+        }
     }
+
 })
 
 // Функция создания заметки
@@ -85,24 +95,21 @@ async function createNote(id){
     })
 
     let answer = await req.json()
-
-
+    console.log(answer)
     if(answer.created){
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
-        currentCol.innerHTML = newCol.innerHTML
         let newColList = getCardTemplateList(data.id, data.title, data.text, false)
-        // let listClass = document.querySelector('.listClass')
-        let listClass = document.getElementsByClassName('listClass')
-        console.log(`this is: ${listClass}`);
-        // if (listClass) {
-        //     currentCol.innerHTML = newColList.innerHTML
-        // } else {
-        //     currentCol.innerHTML = newCol.innerHTML
-        //
-        // }
-    }
 
+        let listClass = document.querySelectorAll('.listClass')
+        console.log(listClass);
+        if (listClass) {
+            currentCol.innerHTML = newColList.innerHTML
+        } else {
+
+
+        }
+    }
 }
 
 async function editNote(id){
@@ -125,17 +132,17 @@ async function editNote(id){
     if(answer.edited) {
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
-        currentCol.innerHTML = newCol.innerHTML
-        // let newColList = getCardTemplateList(data.id, data.title, data.text, false)
-        //
-        // let listClass = document.querySelectorAll('.listClass')
-        // console.log(listClass);
-        // if (listClass) {
-        //     currentCol.innerHTML = newColList.innerHTML
-        // } else {
-        //     currentCol.innerHTML = newCol.innerHTML
-        //
-        // }
+
+        let newColList = getCardTemplateList(data.id, data.title, data.text, false)
+
+        let listClass = document.querySelectorAll('.listClass')
+        console.log(listClass);
+        if (listClass) {
+            currentCol.innerHTML = newColList.innerHTML
+        } else {
+            currentCol.innerHTML = newCol.innerHTML
+
+        }
     }
 }
 
@@ -189,7 +196,7 @@ function getCardTemplate( id, title, text, editStatus){
     }
     const cardContainer = `
             <div class="card">
-                <div class="card-body bg-warning listClass" data-id="${id}">
+                <div class="card-body bg-warning" data-id="${id}">
                     <div class="text-right">
                         <button type="button" data-id="${id}" class="btn btn-danger">-</button>
                     </div>
@@ -223,22 +230,22 @@ function getTextVal(id, editStatus){
     const tagList = editStatus ? "#inputText" : "p"
     const elemList = document.querySelector(`.card-body[data-id="${id}"] ${tagList}`)
 
-    // console.log(`'text area:' ${elem.value}`);
-    // console.log(`'inputs text' ${elemList.value}`);
-
     if(editStatus){
         if (elem) {
             return elem.value
         } else {
             return elemList.value
         }
-    } else{
+    }
+    else{
         if (elem) {
             return elem.innerText
         } else {
             return elemList.innerText
         }
     }
+    // console.log(`'text area:' ${elem.value}`);
+    // console.log(`'inputs text' ${elemList.value}`);
 }
 
 function getCol(id){
@@ -289,7 +296,7 @@ function getCardTemplateList(id, title, text, editStatus){
     }
     const cardContainer = `
             <div class="card">
-                <div class="card-body bg-warning" data-id="${id}">
+                <div class="card-body bg-warning listClass" data-id="${id}">
                     <div class="text-right">
                         <button type="button" data-id="${id}" class="btn btn-danger">-</button>
                     </div>
@@ -300,7 +307,7 @@ function getCardTemplateList(id, title, text, editStatus){
             </div>`
 
     const wrapper = document.createElement('div')
-    wrapper.className = 'col-4'
+    wrapper.className = 'col-4 , listClass'
     wrapper.innerHTML = cardContainer
     return wrapper
 }
