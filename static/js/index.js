@@ -20,7 +20,7 @@ createBtn.addEventListener('click', ()=>{
     getCardBody(id).setAttribute('data-created', 'false')
 })
 
-//По клику на кнопку добавление нового списка заметок
+//По клику на кнопку добавление нового списка
 addListBtn.addEventListener('click', ()=>{
     // Список добавляем новую карточку с инпутами
     let id = Date.now()
@@ -30,15 +30,16 @@ addListBtn.addEventListener('click', ()=>{
 
 })
 
-//Слушатель нажатия на кнопку
+//Слушатель нажатия на кнопку (удалить, сохранить, редактировать)
 notesList.addEventListener('click', function(e) {
     // Обьявляем ай ди заметки
     let id = e.target.dataset.id
+    console.log(id);
     if(e.target.classList.contains('btn-danger')) {
         // console.log('delete')
         deleteNote(id)
     } else if(e.target.classList.contains('save-btn')){
-        // console.log('save')
+        console.log('save')
         if(getCardBody(id).dataset.edit){
             editNote(id)
         } else{
@@ -47,11 +48,11 @@ notesList.addEventListener('click', function(e) {
     } else if(e.target.classList.contains('edit-btn')) {
         console.log('edit')
         let currentCol = getCol(id)
-        let newCol = getCardTemplate(id, getTitleVal(id, false), getTextVal(id, false), true)
+        let newCol = getCardTemplate(id, getTitleVal(id, false), getTextVal(id, false), true);
         currentCol.innerHTML = newCol.innerHTML
         getCardBody(id).setAttribute("data-edit", "true");
-    }
-    else if (e.target.classList.contains('card-body')) {
+
+    } else if (e.target.classList.contains('card-body')) {
 
         if (e.target.dataset.created !== "false"){
             window.location.href = `/${id}`
@@ -60,11 +61,11 @@ notesList.addEventListener('click', function(e) {
 })
 
 // Функция создания заметки
-async function createNote(id, set){
+async function createNote(id){
     let data = {
         id: id,
         title: getTitleVal(id, true),
-        text: getTextVal(id, set, true)
+        text: getTextVal(id, true)
     }
     console.log(data)
     let req = await fetch("http://localhost:3000/create", {
@@ -78,18 +79,16 @@ async function createNote(id, set){
     let answer = await req.json()
     console.log(answer)
     if(answer.created){
-
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
-
         let newColList = getCardTemplateList(data.id, data.title, data.text, false)
 
         if (newCol) {
             currentCol.innerHTML = newCol.innerHTML
         } else {
             currentCol.innerHTML = newColList.innerHTML
-        }
 
+        }
     }
 
 }
@@ -114,7 +113,13 @@ async function editNote(id){
     if(answer.edited){
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
-        currentCol.innerHTML = newCol.innerHTML
+
+        if(newCol){
+            currentCol.innerHTML = newCol.innerHTML
+        } else {
+            newCol = getCardTemplateList(data.id, data.title, data.text, false)
+            currentCol.innerHTML = newCol.innerHTML
+        }
     }
 }
 
@@ -154,6 +159,8 @@ function getCardTemplate( id, title, text, editStatus){
             <h5 class="card-title">${title}</h5>
             <p class="card-text">${text}</p>`
 
+    console.log(`"card" ${text}`);
+
     let submitBtn,
         neededContentElems
 
@@ -184,6 +191,9 @@ function getCardTemplate( id, title, text, editStatus){
 function getTitleVal(id, editStatus){
     const tag = editStatus ? "input" : "h5"
     const elem = document.querySelector(`.card-body[data-id="${id}"] ${tag}`)
+
+    console.log(`'title is' ${elem.value}`);
+
     if(editStatus){
         return elem.value
     } else{
@@ -191,44 +201,25 @@ function getTitleVal(id, editStatus){
     }
 }
 
-// function getTextVal(id, editStatus){
-//     const tag = editStatus ? "textarea" : "p"
-//     const elem = document.querySelector(`.card-body[data-id="${id}"] ${tag}`)
-//
-//     const tagList = editStatus ? "input" : "p"
-//     const elemList = document.querySelector(`.card-body[data-id="${id}"] ${tagList}`)
-//     if(editStatus){
-//         if (elem) {
-//             return elem.value
-//         } else {
-//             return elemList.value
-//         }
-//     } else{
-//         if (elem) {
-//             return elem.innerText
-//         } else {
-//             return elemList.innerText
-//         }
-//     }
-// }
-
-function getTextVal(id, set, editStatus){
+function getTextVal(id, editStatus){
     const tag = editStatus ? "textarea" : "p"
     const elem = document.querySelector(`.card-body[data-id="${id}"] ${tag}`)
+    const tagList = editStatus ? "#inputText" : "p"
+    const elemList = document.querySelector(`.card-body[data-id="${id}"] ${tagList}`)
 
-    const tagList = editStatus ? "input" : "p"
-    const elemList = document.querySelector(`.card-body[data-set="${set}"] ${tagList}`)
-    if(elem) {
+    // console.log(`'text area:' ${elem.value}`);
+    // console.log(`'inputs text' ${elemList.value}`);
 
-        if(editStatus){
+    if(editStatus){
+        if (elem) {
             return elem.value
-        } else{
-            return elem.innerText
-        }
-    } else {
-        if(editStatus){
+        } else {
             return elemList.value
-        } else{
+        }
+    } else{
+        if (elem) {
+            return elem.innerText
+        } else {
             return elemList.innerText
         }
     }
@@ -236,23 +227,20 @@ function getTextVal(id, set, editStatus){
 
 function getCol(id){
     return document.querySelector(`.card-body[data-id="${id}"]`).parentNode.parentNode
-    // console.log(id);
 }
 
 function getCardBody(id){
     return document.querySelector(`.card-body[data-id="${id}"]`)
 }
 
-
-// функции для добавления карточек со списком
+// функции для добавления карточек с заметками
 function getCardTemplateList(id, title, text, editStatus){
 
     const inputElems = `
 <div class="form-inline">
             <div class="my-1 mr-2" >
                 <label for="note-title">Title</label>
-                <input type="text" class="form-control" id="note-title" value="${title}">
-                 
+                <input type="text" class="form-control" id="note-title" value="${title}">      
             </div>
            
             <div id="listField"></div> 
@@ -261,12 +249,14 @@ function getCardTemplateList(id, title, text, editStatus){
             
                 <input type="checkbox" class="custom-control-input" id="id">
                 <label class="custom-control-label" for="id">
-                    <input class="form-control" id="note-text" data-set="set" value="${text}">
+                    <input class="form-control" id = "inputText" data-set="set0" name="value[]" value="${text}">
                     <button class="badge badge-primary"> - </button>
                     <button class="badge badge-primary text-right" id="checkPlus"> + </button>
                 </label>
             </div>                
 </div>`
+    console.log(`"list" ${text}`);
+
     const textElems = `
             <h5 class="card-title">${title}</h5>
             <p class="card-text">${text}</p>`
@@ -299,7 +289,7 @@ function getCardTemplateList(id, title, text, editStatus){
     return wrapper
 }
 
-
+//добавление инпутов для заметок
 document.addEventListener('click',(event)=>{
 
     if(event.target.id === 'checkPlus'){
@@ -309,7 +299,7 @@ document.addEventListener('click',(event)=>{
         let count = 1;
         console.log(parent);
 
-        const divForInputs = parent.querySelector('#listField')
+        const divForInputs =parent.querySelector('#listField')
         divForInputs.className = "custom-control custom-checkbox my-1 mr-sm-2"
 
         const creatInput = document.createElement('input')
