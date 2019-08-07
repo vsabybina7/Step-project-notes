@@ -33,68 +33,97 @@ addListBtn.addEventListener('click', ()=>{
 })
 
 //Слушатель нажатия на кнопку (удалить, сохранить, редактировать)
+
 notesList.addEventListener('click', function(e) {
+    console.log('this is noteList event');
     // Обьявляем ай ди заметки
     let id = e.target.dataset.id
-    // console.log(id);
+    console.log(id);
     if(e.target.classList.contains('btn-danger')) {
         // console.log('delete')
         deleteNote(id)
-    }
-    // else if (e.target.classList.contains('save-btn-list')) {
-    //
-    // }
-    else if(e.target.classList.contains('save-btn')){
-        // console.log('save')
+    } else if(e.target.classList.contains('save-btn')){
+        console.log('save')
         if(getCardBody(id).dataset.edit){
-            editNote(id, event.target)
+            let parent = e.target.closest('.card-body');
+            if(parent.classList.contains('listClass')){
+                editNoteList(id)
+            } else {
+                editNote(id)
+            }
+
         } else{
-            createNote(id, event.target)
+            let parent = e.target.closest('.card-body');
+            if(parent.classList.contains('listClass')){
+                createNoteList(id)
+            } else {
+                createNote(id)
+            }
         }
     } else if(e.target.classList.contains('edit-btn')) {
-        let currentCol = getCol(id)
-        let newCol = getCardTemplate(data.id, data.title, data.text, false)
-        currentCol.innerHTML = newCol.innerHTML
-        // const isList = elem.attributes.class.value.split(' ').includes('save-btn-list');
-        //
-        // let currentCol = getCol(id)
-        // let newCol = getCardTemplate(data.id, data.title, data.text, false)
+        let parent = e.target.closest('.card-body');
+        if(parent.classList.contains('listClass')){
+            let currentCol = getCol(id)
+            let newCol = getCardTemplateList(id, getTitleVal(id, false), getTextVal(id, false), true);
+            currentCol.innerHTML = newCol.innerHTML
+            getCardBody(id).setAttribute("data-edit", "true");
+        }else{
+            let currentCol = getCol(id)
+            let newCol = getCardTemplate(id, getTitleVal(id, false), getTextVal(id, false), true);
+            currentCol.innerHTML = newCol.innerHTML
+            getCardBody(id).setAttribute("data-edit", "true");
+        }
+    } else if (e.target.classList.contains('card-body')) {
+        if (e.target.dataset.created !== "false") {
+            window.location.href = `/${id}`
+        }
+    }
+})
+
+
+
+// Функция создания заметки
+// async function createNote(id, elem){
+//     let data = {
+//         id: id,
+//         title: getTitleVal(id, true),
+//         text: getTextVal(id, true)
+//     }
+//     console.log(data)
+//     let req = await fetch("http://localhost:3000/create", {
+//         method: "POST",
+//         headers: {
+//             "Content-Type":"application/json"
+//         },
+//         body: JSON.stringify(data)
+//     })
+    // const isList = elem.attributes.class.value.split(' ').includes('save-btn-list');
+
+    // let answer = await req.json()
+    // console.log(answer)
+    // if(answer.created){
+    //     let currentCol = getCol(id)
+    //     let newCol = getCardTemplate(data.id, data.title, data.text, false)
         // let newColList = getCardTemplateList(data.id, data.title, data.text, false)
-        //
+        // currentCol.innerHTML = newCol.innerHTML
+
+        // console.log(listClass);
         // if (isList) {
         //     currentCol.innerHTML = newColList.innerHTML
         // } else {
         //     currentCol.innerHTML = newCol.innerHTML
         //
-        // }
+//         // }
+//     }
+// }
 
-
-        getCardBody(id).setAttribute("data-edit", "true");
-    }
-    else if (e.target.classList.contains('edit-btn-list')) {
-        let currentCol = getCol(id)
-        let newColList = getCardTemplateList(data.id, data.title, data.text, false)
-        currentCol.innerHTML = newColList.innerHTML
-        getCardBody(id).setAttribute("data-edit", "true");
-
-    }
-    else if (e.target.classList.contains('card-body')) {
-
-        if (e.target.dataset.created !== "false") {
-            window.location.href = `/${id}`
-        }
-    }
-
-})
-
-// Функция создания заметки
-async function createNote(id, elem){
+async function createNote(id){
     let data = {
         id: id,
         title: getTitleVal(id, true),
         text: getTextVal(id, true)
     }
-    // console.log(data)
+    console.log(data)
     let req = await fetch("http://localhost:3000/create", {
         method: "POST",
         headers: {
@@ -102,32 +131,53 @@ async function createNote(id, elem){
         },
         body: JSON.stringify(data)
     })
-    const isList = elem.attributes.class.value.split(' ').includes('save-btn-list');
 
     let answer = await req.json()
-    // console.log(answer)
+    console.log(answer)
     if(answer.created){
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
-        let newColList = getCardTemplateList(data.id, data.title, data.text, false)
-        // currentCol.innerHTML = newCol.innerHTML
-
-        // console.log(listClass);
-        if (isList) {
-            currentCol.innerHTML = newColList.innerHTML
-        } else {
-            currentCol.innerHTML = newCol.innerHTML
-
-        }
+        currentCol.innerHTML = newCol.innerHTML
     }
+
 }
 
-async function editNote(id, elem){
+
+async function createNoteList(id){
     let data = {
         id: id,
         title: getTitleVal(id, true),
         text: getTextVal(id, true)
     }
+    console.log(data)
+    let req = await fetch("http://localhost:3000/create", {
+        method: "POST",
+        headers: {
+            "Content-Type":"application/json"
+        },
+        body: JSON.stringify(data)
+    })
+
+
+    let answer = await req.json()
+    // console.log(answer)
+    if(answer.created){
+        let currentCol = getCol(id)
+        let newCol = getCardTemplateList(data.id, data.title, data.text, false)
+        currentCol.innerHTML = newCol.innerHTML
+        // console.log(listClass);
+
+    }
+}
+
+
+async function editNote(id){
+    let data = {
+        id: id,
+        title: getTitleVal(id, true),
+        text: getTextVal(id, true)
+    }
+    console.log(data)
     let req = await fetch("http://localhost:3000/edit", {
         method: "POST",
         headers: {
@@ -135,29 +185,94 @@ async function editNote(id, elem){
         },
         body: JSON.stringify(data)
     })
+
     let answer = await req.json()
-    // console.log(answer)
-    const isList = elem.attributes.class.value.split(' ').includes('save-btn-list');
-
-    if(answer.edited) {
-
+    console.log(answer)
+    if(answer.edited){
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
-        let newColList = getCardTemplateList(data.id, data.title, data.text, false)
+        currentCol.innerHTML = newCol.innerHTML
+    }
 
-        if (isList) {
-            currentCol.innerHTML = newColList.innerHTML
-        } else {
-            currentCol.innerHTML = newCol.innerHTML
+}
 
-        }
+async function editNoteList(id){
+    let data = {
+        id: id,
+        title: getTitleVal(id, true),
+        text: getTextVal(id, true)
+    }
+    console.log(data)
+    let req = await fetch("http://localhost:3000/edit", {
+        method: "POST",
+        headers: {
+            "Content-Type":"application/json"
+        },
+        body: JSON.stringify(data)
+    })
+
+    let answer = await req.json()
+    console.log(answer)
+    if(answer.edited){
+        let currentCol = getCol(id)
+        let newCol = getCardTemplateList(data.id, data.title, data.text, false)
+        currentCol.innerHTML = newCol.innerHTML
     }
 }
+
+
+
+
+
+// async function editNote(id){
+//     let data = {
+//         id: id,
+//         title: getTitleVal(id, true),
+//         text: getTextVal(id, true)
+//     }
+//     let req = await fetch("http://localhost:3000/edit", {
+//         method: "POST",
+//         headers: {
+//             "Content-Type":"application/json"
+//         },
+//         body: JSON.stringify(data)
+//     })
+//     let answer = await req.json()
+    // console.log(answer)
+    // const isList = elem.attributes.class.value.split(' ').includes('edit-btn-list');
+
+    // if(answer.edited) {
+    //
+    //     let currentCol = getCol(id)
+    //
+    //
+    //
+    //     let newColList = getCardTemplateList(id, getTitleVal(id, false), getTextVal(id, false), true);
+    //     currentCol.innerHTML = newColList.innerHTML
+
+
+        // let newCol = getCardTemplate(id, getTitleVal(id, false), getTextVal(id, false), true);
+        // currentCol.innerHTML = newCol.innerHTML
+        //
+        // let newCol = getCardTemplate(data.id, data.title, data.text, false)
+        // currentCol.innerHTML = newCol.innerHTML
+
+
+        // let newColList = getCardTemplateList(data.id, data.title, data.text, false)
+        // if (isList) {
+        //     currentCol.innerHTML = newColList.innerHTML
+        // } else {
+        //     currentCol.innerHTML = newCol.innerHTML
+        //
+        // }
+//     }
+// }
 
 async function deleteNote(id) {
     let data = {
         id: id
     }
+    console.log(data);
     let req = await fetch("http://localhost:3000/delete", {
         method: "POST",
         headers: {

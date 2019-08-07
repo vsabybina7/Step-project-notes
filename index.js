@@ -29,13 +29,19 @@ app.set("view engine", "ejs")
 
 app.get("/", async (req, res)=>{
     let notes = []
+    let lists =[]
     await app.db.find({}).forEach((el) => {
         notes.push(el)
     });
+
+    await app.db.find({}).forEach((elem) => {
+        notes.push(lists)
+    });
     // console.log(notes);
-    res.render("index", {notes})
-
-
+    res.render("index", {
+        notes,
+        lists
+    })
 })
 
 
@@ -103,6 +109,20 @@ app.get('/:id', async (req, res) => {
     res.render("note", {note})
 
 })
+
+
+app.get('/:id', async (req, res) => {
+
+    let list;
+
+    await app.db.find({id: req.params.id}).forEach((elem) => {
+        list = elem
+    })
+
+    res.render("list", {list})
+
+})
+
 
 app.listen(port, ()=>{
     console.log("hello in console")
