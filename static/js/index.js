@@ -68,7 +68,7 @@ notesList.addEventListener('click', function(e) {
 
         if(parent.classList.contains('listClass')){
             let currentCol = getCol(id)
-            let newCol = getCardTemplateList(id, getTitleVal(id, false), getTextVal(id, false), true);
+            let newCol = getCardTemplateList(id, getTitleValList(id, false), getTextVal(id, false), true);
             currentCol.innerHTML = newCol.innerHTML
             getCardBody(id).setAttribute("data-edit", "true");
         }else{
@@ -115,7 +115,7 @@ async function createNote(id){
 async function createNoteList(id){
     let data = {
         id: id,
-        title: getTitleVal(id, true),
+        title: getTitleValList(id, true),
         text: getTextVal(id, true)
     }
     console.log(data)
@@ -162,7 +162,7 @@ async function editNote(id){
 async function editNoteList(id){
     let data = {
         id: id,
-        title: getTitleVal(id, true),
+        title: getTitleValList(id, true),
         text: getTextVal(id, true)
     }
     console.log(data)
@@ -250,9 +250,23 @@ function getCardTemplate( id, title, text, editStatus){
 
 function getTitleVal(id, editStatus){
     const tag = editStatus ? "input" : "h5"
-    const elem = document.querySelector(`.card-body[data-id="${id}"] ${tag}`)
+    const el = document.querySelector(`.card-body[data-id="${id}"] ${tag}`)
 
    // console.log(`'title is' ${elem.value}`);
+
+    if(editStatus){
+        return el.value
+    } else{
+        return el.innerText
+    }
+}
+
+
+function getTitleValList(id, editStatus){
+    const tag = editStatus ? "input" : "h5"
+    const elem = document.querySelector(`.card-body[data-id="${id}"] ${tag}`)
+
+    // console.log(`'title is' ${elem.value}`);
 
     if(editStatus){
         return elem.value
@@ -260,6 +274,14 @@ function getTitleVal(id, editStatus){
         return elem.innerText
     }
 }
+
+
+
+
+
+
+
+
 
 function getTextVal(id, editStatus){
     const tag = editStatus ? "textarea" : "p"
