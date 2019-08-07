@@ -9,7 +9,6 @@ let addListBtn = document.getElementById('addList')
 //Находим елемент списка заметок
 let notesList = document.getElementById('notesList')
 
-
 //По клику на кнопку добавление новой заметки
 createBtn.addEventListener('click', ()=>{
     // Список добавляем новую карточку с инпутами
@@ -34,6 +33,8 @@ addListBtn.addEventListener('click', ()=>{
 
 //Слушатель нажатия на кнопку (удалить, сохранить, редактировать)
 notesList.addEventListener('click', function(e) {
+
+    console.log('this is noteList event');
     // Обьявляем ай ди заметки
     let id = e.target.dataset.id
     console.log(id);
@@ -43,39 +44,43 @@ notesList.addEventListener('click', function(e) {
     } else if(e.target.classList.contains('save-btn')){
         console.log('save')
         if(getCardBody(id).dataset.edit){
-            editNote(id)
+            let parent = e.target.closest('.card-body');
+
+            if(parent.classList.contains('listClass')){
+                editNoteList(id)
+            } else {
+                editNote(id)
+            }
         } else{
-            createNote(id)
+            let parent = e.target.closest('.card-body');
+
+            if(parent.classList.contains('listClass')){
+                createNoteList(id)
+            } else {
+                createNote(id)
+            }
         }
     } else if(e.target.classList.contains('edit-btn')) {
 
-        console.log('edit')
-        let currentCol = getCol(id)
-        // currentCol.innerHTML = newCol.innerHTML
-        // currentCol.innerHTML = newColList.innerHTML
+        let parent = e.target.closest('.card-body');
 
-        let newCol = getCardTemplate(id, getTitleVal(id, false), getTextVal(id, false), true);
-        currentCol.innerHTML = newCol.innerHTML
-
-        // let listClass = document.querySelectorAll('.listClass')
-        // console.log(listClass);
-        // if (document.querySelectorAll('.listClass')) {
-        //
-        //     let newColList = getCardTemplateList(id, getTitleVal(id, false), getTextVal(id, false), true);
-        //     currentCol.innerHTML = newColList.innerHTML
-        //
-        // } else {
-        //     let newCol = getCardTemplate(id, getTitleVal(id, false), getTextVal(id, false), true);
-        //     currentCol.innerHTML = newCol.innerHTML
-        // }
-        getCardBody(id).setAttribute("data-edit", "true");
+        if(parent.classList.contains('listClass')){
+            let currentCol = getCol(id)
+            let newCol = getCardTemplateList(id, getTitleVal(id, false), getTextVal(id, false), true);
+            currentCol.innerHTML = newCol.innerHTML
+            getCardBody(id).setAttribute("data-edit", "true");
+        }else{
+            let currentCol = getCol(id)
+            let newCol = getCardTemplate(id, getTitleVal(id, false), getTextVal(id, false), true);
+            currentCol.innerHTML = newCol.innerHTML
+            getCardBody(id).setAttribute("data-edit", "true");
+        }
     } else if (e.target.classList.contains('card-body')) {
 
         if (e.target.dataset.created !== "false") {
             window.location.href = `/${id}`
         }
     }
-
 })
 
 // Функция создания заметки
@@ -100,16 +105,31 @@ async function createNote(id){
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
         currentCol.innerHTML = newCol.innerHTML
-        let newColList = getCardTemplateList(data.id, data.title, data.text, false)
+    }
 
-        let listClass = document.querySelectorAll('.listClass')
-        console.log(listClass);
-        if (listClass) {
-            currentCol.innerHTML = newColList.innerHTML
-        } else {
+}
 
-
-        }
+// Функция создания списка
+async function createNoteList(id){
+    let data = {
+        id: id,
+        title: getTitleVal(id, true),
+        text: getTextVal(id, true)
+    }
+    console.log(data)
+    let req = await fetch("http://localhost:3000/create", {
+        method: "POST",
+        headers: {
+            "Content-Type":"application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    let answer = await req.json()
+    console.log(answer)
+    if(answer.created){
+        let currentCol = getCol(id)
+        let newCol = getCardTemplateList(data.id, data.title, data.text, false)
+        currentCol.innerHTML = newCol.innerHTML
     }
 }
 
@@ -133,17 +153,31 @@ async function editNote(id){
     if(answer.edited) {
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
+        currentCol.innerHTML = newCol.innerHTML
+    }
+}
 
-        let newColList = getCardTemplateList(data.id, data.title, data.text, false)
+async function editNoteList(id){
+    let data = {
+        id: id,
+        title: getTitleVal(id, true),
+        text: getTextVal(id, true)
+    }
+    console.log(data)
+    let req = await fetch("http://localhost:3000/edit", {
+        method: "POST",
+        headers: {
+            "Content-Type":"application/json"
+        },
+        body: JSON.stringify(data)
+    })
 
-        let listClass = document.querySelectorAll('.listClass')
-        console.log(listClass);
-        if (listClass) {
-            currentCol.innerHTML = newColList.innerHTML
-        } else {
-            currentCol.innerHTML = newCol.innerHTML
-
-        }
+    let answer = await req.json()
+    console.log(answer)
+    if(answer.edited) {
+        let currentCol = getCol(id)
+        let newCol = getCardTemplateList(data.id, data.title, data.text, false)
+        currentCol.innerHTML = newCol.innerHTML
     }
 }
 
@@ -197,7 +231,7 @@ function getCardTemplate( id, title, text, editStatus){
     }
     const cardContainer = `
             <div class="card">
-                <div class="card-body bg-warning" data-id="${id}">
+                <div class="card-body bg-warning noteClass" data-id="${id}">
                     <div class="text-right">
                         <button type="button" data-id="${id}" class="btn btn-danger">-</button>
                     </div>
@@ -254,6 +288,7 @@ function getCol(id){
 }
 
 function getCardBody(id){
+
     return document.querySelector(`.card-body[data-id="${id}"]`)
 }
 
