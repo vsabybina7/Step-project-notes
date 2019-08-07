@@ -1,4 +1,5 @@
 
+const a=0;
 
 //Находим кнопку добавления новой заметки
 let createBtn = document.getElementById('addButton')
@@ -251,7 +252,7 @@ function getTitleVal(id, editStatus){
     const tag = editStatus ? "input" : "h5"
     const elem = document.querySelector(`.card-body[data-id="${id}"] ${tag}`)
 
-    console.log(`'title is' ${elem.value}`);
+   // console.log(`'title is' ${elem.value}`);
 
     if(editStatus){
         return elem.value
@@ -289,7 +290,6 @@ function getCol(id){
 }
 
 function getCardBody(id){
-
     return document.querySelector(`.card-body[data-id="${id}"]`)
 }
 
@@ -333,7 +333,7 @@ function getCardTemplateList(id, title, text, editStatus){
     }
     const cardContainer = `
             <div class="card">
-                <div class="card-body bg-warning listClass" data-id="${id}">
+                <div class="card-body listClass" data-id="${id}">
                     <div class="text-right">
                         <button type="button" data-id="${id}" class="btn btn-danger">-</button>
                     </div>
