@@ -1,5 +1,4 @@
 
-const a=0;
 
 //Находим кнопку добавления новой заметки
 let createBtn = document.getElementById('addButton')
@@ -80,7 +79,14 @@ notesList.addEventListener('click', function(e) {
     } else if (e.target.classList.contains('card-body')) {
 
         if (e.target.dataset.created !== "false") {
-            window.location.href = `/${id}`
+
+            let parent = e.target.closest('.card-body');
+            if(parent.classList.contains('listClass')){
+                window.location.href = `/edit/list/${id}`
+            } else {
+                window.location.href = `/edit/note/${id}`
+            }
+
         }
     }
 })
