@@ -34,7 +34,7 @@ app.get("/", async (req, res)=>{
         notes.push(el)
     });
     await app.db.find({}).forEach((elem) => {
-        notes.push(elem)
+        lists.push(elem)
     });
 
     // console.log(notes);
@@ -45,6 +45,15 @@ app.get("/", async (req, res)=>{
     })
 
 })
+
+// app.get('/',(req,res)=>{
+//     res.render('note');
+// });
+//
+// app.get('/',(req,res)=>{
+//     res.render('list');
+// });
+
 
 app.post("/delete", async (req, res) => {
     // Выводим данные запроса
@@ -97,7 +106,7 @@ app.post("/edit", async (req, res) => {
 
 //Отдельная страница для каждой заметки
 
-app.get('/:id', async (req, res) => {
+app.get('/edit/note/:id', async (req, res) => {
 
     let note;
     await app.db.find({id: req.params.id}).forEach((el) => {
@@ -106,11 +115,11 @@ app.get('/:id', async (req, res) => {
     res.render("note", {note})
 })
 
-app.get('/:id', async (req, res) => {
+app.get('/edit/list/:id', async (req, res) => {
     let list;
     await app.db.find({id: req.params.id}).forEach((elem) => {
         list = elem
-    })
+})
     res.render("list", {list})
 
 })
