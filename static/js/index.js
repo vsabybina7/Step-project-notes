@@ -150,6 +150,7 @@ async function createNoteList(id){
 
 async function editNote(id){
     let data = {
+        type: 'note',
         id: id,
         title: getTitleVal(id, true),
         text: getTextVal(id, true)
@@ -175,6 +176,7 @@ async function editNote(id){
 async function editNoteList(id){
     let data = {
         id: id,
+        type: 'list',
         title: getTitleVal(id, true),
         text: getTextVal(id, true)
     }

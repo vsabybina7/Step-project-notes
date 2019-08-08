@@ -95,7 +95,8 @@ app.post("/edit", async (req, res) => {
             {
                 $set: {
                     title: req.body.title,
-                    text: req.body.text
+                    text: req.body.text,
+                    type: req.body.type
                 }
             })
     } catch (err) {
@@ -117,8 +118,8 @@ app.get('/edit/note/:id', async (req, res) => {
 
 app.get('/edit/list/:id', async (req, res) => {
     let list;
-    await app.db.find({id: req.params.id}).forEach((elem) => {
-        list = elem
+    await app.db.find({id: req.params.id}).forEach((el) => {
+        list = el
 })
     res.render("list", {list})
 
