@@ -26,33 +26,33 @@ app.use(express.static(__dirname + "/static"))
 
 app.set("view engine", "ejs")
 
-
 app.get("/", async (req, res)=>{
     let notes = []
     let lists = []
-    await app.db.find({}).forEach((el) => {
-        notes.push(el)
-    });
-    await app.db.find({}).forEach((elem) => {
-        lists.push(elem)
-    });
-
-    // console.log(notes);
-    // console.log(lists);
-    res.render("index", {
-        notes,
-        lists
-    })
+await app.db.find({}).forEach((el) => {
+    notes.push(el)
+});
+await app.db.find({}).forEach((elem) => {
+    lists.push(elem)
+});
+    // console.log('============', notes, lists);
+// console.log(notes);
+// console.log(lists);
+res.render("index", {
+    notes,
+    lists
+})
 
 })
 
-// app.get('/',(req,res)=>{
+// app.get('/note',(req,res)=>{
 //     res.render('note');
 // });
 //
-// app.get('/',(req,res)=>{
+// app.get('/list',(req,res)=>{
 //     res.render('list');
 // });
+
 
 
 app.post("/delete", async (req, res) => {
