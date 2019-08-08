@@ -32,8 +32,8 @@ app.get("/", async (req, res)=>{
 await app.db.find({}).forEach((el) => {
     notes.push(el)
 });
-await app.db.find({}).forEach((elem) => {
-    lists.push(elem)
+await app.db.find({}).forEach((el) => {
+    lists.push(el)
 });
     // console.log('============', notes, lists);
 // console.log(notes);
@@ -124,6 +124,8 @@ app.get('/edit/list/:id', async (req, res) => {
     res.render("list", {list})
 
 })
+
+
 
 app.listen(port, ()=>{
     console.log("hello in console")
