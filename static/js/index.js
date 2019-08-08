@@ -78,21 +78,20 @@ notesList.addEventListener('click', function(e) {
     }
     else if (e.target.classList.contains('card-body')) {
 
-            let parent = e.target.closest('.card-body');
-        a = parent;
-        if(parent.classList.contains('listClass')){
-                if (e.target.dataset.created !== "false") {
-                    window.location.href = `/edit/list/${id}`
-                }
-            } else {
-                if (e.target.dataset.created !== "false") {
-                    window.location.href = `/edit/note/${id}`
-                }
+        // window.location.href = `/${id}`
+
+        let parent = e.target.closest('.card-body');
+
+             if(parent.classList.contains('listClass')){
+                        if (e.target.dataset.created !== "false") {
+                            window.location.href = `/edit/list/${id}`
+                        }
+                    } else {
+                        if (e.target.dataset.created !== "false") {
+                            window.location.href = `/edit/note/${id}`
+                        }
+                    }
             }
-
-
-    }
-
 })
 
 
@@ -151,6 +150,7 @@ async function createNoteList(id){
 async function editNote(id){
     let data = {
         id: id,
+        type: 'note',
         title: getTitleVal(id, true),
         text: getTextVal(id, true)
     }
@@ -175,6 +175,7 @@ async function editNote(id){
 async function editNoteList(id){
     let data = {
         id: id,
+        type: 'list',
         title: getTitleVal(id, true),
         text: getTextVal(id, true)
     }
