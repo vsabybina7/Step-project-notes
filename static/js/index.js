@@ -33,7 +33,7 @@ addListBtn.addEventListener('click', ()=>{
 
 //Слушатель нажатия на кнопку (удалить, сохранить, редактировать)
 notesList.addEventListener('click', function(e) {
-
+    // e.preventDefault();
     console.log('this is noteList event');
     // Обьявляем ай ди заметки
     let id = e.target.dataset.id
@@ -75,20 +75,26 @@ notesList.addEventListener('click', function(e) {
             currentCol.innerHTML = newCol.innerHTML
             getCardBody(id).setAttribute("data-edit", "true");
         }
-    } else if (e.target.classList.contains('card-body')) {
-
-        if (e.target.dataset.created !== "false") {
+    }
+    else if (e.target.classList.contains('card-body')) {
 
             let parent = e.target.closest('.card-body');
-            if(parent.classList.contains('listClass')){
-                window.location.href = `/edit/list/${id}`
+        a = parent;
+        if(parent.classList.contains('listClass')){
+                if (e.target.dataset.created !== "false") {
+                    window.location.href = `/edit/list/${id}`
+                }
             } else {
-                window.location.href = `/edit/note/${id}`
+                if (e.target.dataset.created !== "false") {
+                    window.location.href = `/edit/note/${id}`
+                }
             }
 
-        }
+
     }
+
 })
+
 
 // Функция создания заметки
 async function createNote(id){
@@ -304,8 +310,8 @@ function getCardTemplateList(id, title, text, editStatus){
     const inputElems = `
 <div class="form-inline">
             <div class="my-1 mr-2" >
-                <label for="note-title">Title</label>
-                <input type="text" class="form-control" id="note-title" value="${title}">      
+                <label for="note-title" style="color: dodgerblue; font-weight: bold; margin-left: 25px">Title</label>
+                <input type="text" class="form-control" id="note-title" value="${title}" style="margin-left: 25px">      
             </div>
            
             <div id="listField"></div> 
@@ -316,9 +322,11 @@ function getCardTemplateList(id, title, text, editStatus){
                 <label class="custom-control-label" for="id">
                     <input class="form-control" id = "inputText" data-set="set0" name="value[]" value="${text}">
                     <button class="badge badge-primary"> - </button>
-                    <button class="badge badge-primary text-right" id="checkPlus"> + </button>
+                    
                 </label>
-            </div>                
+           
+            </div> 
+            <button class="badge badge-primary text-right" id="checkPlus" style="margin-left: 208px; margin-bottom: 45px"> + </button>              
 </div>`
     console.log(`"list" ${text}`);
 
@@ -330,7 +338,8 @@ function getCardTemplateList(id, title, text, editStatus){
         neededContentElems
 
     if(editStatus){
-        submitBtn = `<button class="btn btn-primary save-btn" data-id="${id}">Save</button>`
+        submitBtn = `<button class="btn btn-primary save-btn" data-id="${id}" style="margin-left: 25px">Save</button>`
+
         neededContentElems = inputElems
     } else{
         submitBtn = `<button class="btn btn-success edit-btn" data-id="${id}">Edit</button>`
@@ -340,12 +349,13 @@ function getCardTemplateList(id, title, text, editStatus){
             <div class="card">
                 <div class="card-body listClass" data-id="${id}">
                     <div class="text-right">
-                        <button type="button" data-id="${id}" class="btn btn-danger">-</button>
+                        <button type="button" data-id="${id}" class="btn btn-danger" style="margin-right:25px" id="btn-minus">-</button>
                     </div>
+                   
                     ${neededContentElems}
-                    ${submitBtn}          
-                </div>
-                
+                    ${submitBtn}     
+                          
+                </div>          
             </div>`
 
     const wrapper = document.createElement('div')
@@ -370,14 +380,19 @@ document.addEventListener('click',(event)=>{
         const creatInput = document.createElement('input')
         creatInput.type = 'checkbox'
         divForInputs.appendChild(creatInput)
-        // creatInput.className = ''
+        // creatInput.className = 'custom-control-input'
+        // creatInput.style.position=' absolute '
+        // creatInput.style.zIndex= '1 '
+        // creatInput.style.opacity ='0 '
+        // creatInput.style.left = '2px'
+        // creatInput.style.top='6px'
         creatInput.name = 'name'
         creatInput.value = 'value'
         // creatInput.id = 'id' + count
         divForInputs.appendChild(creatInput)
 
         const labelForInput = document.createElement('label')
-        // labelForInput.className = ''
+        // labelForInput.className = 'custom-control-label'
         // labelForInput.htmlFor = 'id' + count
         labelForInput.appendChild(document.createTextNode(''));
 
@@ -404,3 +419,4 @@ document.addEventListener('click',(event)=>{
         })
     }
 })
+
