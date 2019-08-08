@@ -100,6 +100,7 @@ notesList.addEventListener('click', function(e) {
 async function createNote(id){
     let data = {
         id: id,
+        type: 'note',
         title: getTitleVal(id, true),
         text: getTextVal(id, true)
     }
@@ -126,6 +127,7 @@ async function createNote(id){
 async function createNoteList(id){
     let data = {
         id: id,
+        type: 'list',
         title: getTitleVal(id, true),
         text: getTextVal(id, true)
     }
