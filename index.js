@@ -26,17 +26,34 @@ app.use(express.static(__dirname + "/static"))
 
 app.set("view engine", "ejs")
 
-
 app.get("/", async (req, res)=>{
     let notes = []
-    await app.db.find({}).forEach((el) => {
-        notes.push(el)
-    });
-    // console.log(notes);
-    res.render("index", {notes})
-
+    let lists = []
+await app.db.find({}).forEach((el) => {
+    notes.push(el)
+});
+await app.db.find({}).forEach((elem) => {
+    lists.push(elem)
+});
+    // console.log('============', notes, lists);
+// console.log(notes);
+// console.log(lists);
+res.render("index", {
+    notes,
+    lists
+})
 
 })
+
+// app.get('/note',(req,res)=>{
+//     res.render('note');
+// });
+//
+// app.get('/list',(req,res)=>{
+//     res.render('list');
+// });
+
+
 
 app.post("/delete", async (req, res) => {
     // Выводим данные запроса
@@ -74,7 +91,6 @@ app.post("/edit", async (req, res) => {
         // Создаем в базе заметку
         await app.db.updateOne({
                 id: req.body.id,
-
             },
             {
                 $set: {
@@ -90,15 +106,21 @@ app.post("/edit", async (req, res) => {
 
 //Отдельная страница для каждой заметки
 
-app.get('/:id', async (req, res) => {
+app.get('/edit/note/:id', async (req, res) => {
 
     let note;
-
     await app.db.find({id: req.params.id}).forEach((el) => {
         note = el
     })
-
     res.render("note", {note})
+})
+
+app.get('/edit/list/:id', async (req, res) => {
+    let list;
+    await app.db.find({id: req.params.id}).forEach((elem) => {
+        list = elem
+})
+    res.render("list", {list})
 
 })
 
