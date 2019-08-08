@@ -23,6 +23,7 @@ createBtn.addEventListener('click', ()=>{
 //По клику на кнопку добавление нового списка
 addListBtn.addEventListener('click', ()=>{
     // Список добавляем новую карточку с инпутами
+
     let id = Date.now()
     notesList.appendChild(getCardTemplateList(id, "", "", true))
 
@@ -33,9 +34,11 @@ addListBtn.addEventListener('click', ()=>{
 })
 
 //Слушатель нажатия на кнопку (удалить, сохранить, редактировать)
+
+
 notesList.addEventListener('click', function(e) {
 
-    console.log('this is noteList event');
+    // console.log('this is noteList event');
     // Обьявляем ай ди заметки
     let id = e.target.dataset.id
     console.log(id);
