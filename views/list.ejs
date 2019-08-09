@@ -10,13 +10,18 @@
 </head>
 <body>
 
-<div class="card" style="width: 18rem;">
-    <div class="card-body listClass">
+
+
+<div class="card" style="width: 18rem; position: absolute; top: 30%; left: 40%">
+    <h6>List</h6>
+    <div class="card-body listClass" data-id="${id}" style="text-align: center;">
         <h5 class="card-title"><%= list.title %></h5>
         <p class="card-text"><%= list.text %></p>
-        <a href="/" class="btn btn-primary">Go</a>
+<!--        <button class="btn btn-success edit" data-id="${id}">Edit</button>-->
     </div>
+    <a href="/" class="btn btn-primary">To the main page</a>
 </div>
-<!--<script src="/js/index.js"></script>-->
+
+
 </body>
 </html>
