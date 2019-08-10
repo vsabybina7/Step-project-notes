@@ -36,16 +36,12 @@ notesList.addEventListener('click', function(e) {
     // console.log('this is noteList event');
     // Обьявляем ай ди заметки
     let id = e.target.dataset.id
-    console.log(id);
+    // console.log(id);
     if(e.target.classList.contains('btn-danger')) {
         // console.log('delete')
         deleteNote(id)
     } else if(e.target.classList.contains('save-btn')){
-<<<<<<< HEAD
-        console.log('save')
-=======
         // console.log('save')
->>>>>>> c8510a13367cc7255ff7812a2674c2ac37036dfa
         if(getCardBody(id).dataset.edit){
             let parent = e.target.closest('.card-body');
 
@@ -173,7 +169,6 @@ async function createNoteList(id){
 
 async function editNote(id){
     let data = {
-        type: 'note',
         id: id,
         type: 'note',
         title: getTitleVal(id, true),
@@ -267,12 +262,8 @@ function getCardTemplate( id, title, text, editStatus){
         submitBtn = `<button class="btn btn-primary save-btn" data-id="${id}">Save</button>`
         neededContentElems = inputElems
     } else{
-<<<<<<< HEAD
-        submitBtn = `<button class="btn btn-success edit-btn" data-id="${id}">Edit</button>`
-=======
         submitBtn = `<button class="btn btn-success edit-btn edit-btn-note" data-id="${id}">Edit</button>
                      <button class="btn btn-success btn-show" data-id="${id}">Show note</button>`
->>>>>>> c8510a13367cc7255ff7812a2674c2ac37036dfa
         neededContentElems = textElems
     }
     const cardContainer = `
@@ -369,7 +360,7 @@ function getCardTemplateList(id, title, text, editStatus){
                 </label>              
             </div>              
 </div>`
-    console.log(`"list" ${text}`);
+    // console.log(`"list" ${text}`);
 
     const textElems = `
             <h5 class="card-title">${title}</h5>
@@ -379,23 +370,14 @@ function getCardTemplateList(id, title, text, editStatus){
         neededContentElems
 
     if(editStatus){
-<<<<<<< HEAD
-        submitBtn = `<button class="btn btn-primary save-btn" data-id="${id}" style="margin-left: 25px">Save</button>`
-
-=======
         submitBtn = `<button class="btn btn-primary save-btn" data-id="${id}" style="margin-left: 25px">Save</button>
  <button class="badge badge-primary text-right" id="checkPlus" style="margin-left:100px; "> + </button> 
 `
->>>>>>> c8510a13367cc7255ff7812a2674c2ac37036dfa
         neededContentElems = inputElems
 
     } else{
-<<<<<<< HEAD
-        submitBtn = `<button class="btn btn-success edit-btn" data-id="${id}">Edit</button>`
-=======
         submitBtn = `<button class="btn btn-success edit-btn" data-id="${id}">Edit</button>
                      <button class="btn btn-success btn-show" data-id="${id}">Show list</button>`
->>>>>>> c8510a13367cc7255ff7812a2674c2ac37036dfa
         neededContentElems = textElems
     }
     const cardContainer = `
@@ -425,14 +407,9 @@ document.addEventListener('click',(event)=>{
     if(event.target.id === 'checkPlus'){
         const parent = event.target.closest('.card');
 
-<<<<<<< HEAD
-        let count = 1;
-        console.log(parent);
-=======
         // console.log(parent);
         const formInline = parent.querySelector('#listField')
 
->>>>>>> c8510a13367cc7255ff7812a2674c2ac37036dfa
 
         // const formInline = document.getElementsByClassName('form-inline')
 

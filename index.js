@@ -38,11 +38,6 @@ app.get("/", async (req, res)=>{
     })
 })
 
-<<<<<<< HEAD
-// app.get('/note',(req,res)=>{
-//     res.render('note');
-
-=======
 // app.get('/notes/:id', async (req,res)=>{
 //     try {
 //         const data = await db.find(req.params.id);
@@ -55,7 +50,6 @@ app.get("/", async (req, res)=>{
 //     } catch (e) {
 //         console.log(e);
 //     }
->>>>>>> c8510a13367cc7255ff7812a2674c2ac37036dfa
 // });
 //
 // app.get('/lists/:id', async (req,res)=>{
@@ -114,8 +108,7 @@ app.post("/edit", async (req, res) => {
             {
                 $set: {
                     title: req.body.title,
-                    text: req.body.text,
-                    type: req.body.type
+                    text: req.body.text
                 }
             })
     } catch (err) {

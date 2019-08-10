@@ -55,19 +55,14 @@
                             <button type="button" data-id="<%= el.id %>"  class="btn btn-danger">-</button>
                         </div>
                         <h5 class="card-title"><%= el.title %></h5>
-                        <p id="list-task" class="card-text list-text ">
 
-<!--                            <% el.text.forEach((e) => { %>-->
-<!--                        <li class="list-item" data-id="<%= el.id %>"><%= e %></li>-->
-<!--                        <% }) %>-->
-
-                        </p>
+                        <p class="card-text list-text "><%= el.text %></p>
 
                         <% for(let key in el) { %>
                         <% if(key !== '_id' && key !== 'id' && key !== 'type' && key !== 'text1' && key !== 'title'){ %>
                         <div class="list-item-container d-flex align-items-center mb-2" data-listName="<%=key%>">
                             <input type="checkbox" class="list-checkbox">
-                            <p class="ml-3 my-0"><%= el[key] %></p></div>
+                            <p class="ml-3 my-0"><%= el[key].value %></p></div>
                         <% }} %>
 
                         <button class="btn btn-success edit-btn " data-id="<%= el.id %>" >Edit</button>
