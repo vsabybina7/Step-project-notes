@@ -13,13 +13,10 @@ const uri = "mongodb+srv://admin:admin@cluster0-dpwsd.mongodb.net/test?retryWrit
 
 const client = new MongoClient(uri, { useNewUrlParser: true });
 
-
 client.connect(err => {
     console.log('BD connect error: ', err)
     const collection = client.db("Step_3").collection("Notes");
     app.db = collection
-
-//   client.close();
 });
 
 app.use(express.static(__dirname + "/static"))
@@ -29,36 +26,57 @@ app.set("view engine", "ejs")
 app.get("/", async (req, res)=>{
     let notes = []
     let lists = []
-await app.db.find({}).forEach((el) => {
-    notes.push(el)
-});
-await app.db.find({}).forEach((el) => {
-    lists.push(el)
-});
-    // console.log('============', notes, lists);
-// console.log(notes);
-// console.log(lists);
-res.render("index", {
-    notes,
-    lists
+    await app.db.find({}).forEach((el) => {
+        notes.push(el)
+    });
+    await app.db.find({}).forEach((el) => {
+        lists.push(el)
+    });
+    res.render("index", {
+        notes,
+        lists
+    })
 })
 
-})
-
+<<<<<<< HEAD
 // app.get('/note',(req,res)=>{
 //     res.render('note');
 
+=======
+// app.get('/notes/:id', async (req,res)=>{
+//     try {
+//         const data = await db.find(req.params.id);
+//         res.render('pages/notes/edit', {
+//             id: req.params.id,
+//             type: note,
+//             title: data.title,
+//             content: data.text
+//         });
+//     } catch (e) {
+//         console.log(e);
+//     }
+>>>>>>> c8510a13367cc7255ff7812a2674c2ac37036dfa
 // });
 //
-// app.get('/list',(req,res)=>{
-//     res.render('list');
+// app.get('/lists/:id', async (req,res)=>{
+//     try {
+//         const data = await db.find(req.params.id);
+//         res.render('pages/lists/edit', {
+//             id: req.params.id,
+//             type: list,
+//             title: data.title,
+//             tasks: data.text
+//         });
+//     } catch (e) {
+//         console.log(e);
+//     }
 // });
 
 
 
 app.post("/delete", async (req, res) => {
     // Выводим данные запроса
-    console.log(req.body.id)
+    // console.log(req.body.id)
     try {
         // Удаляем заметку по id
         await app.db.deleteOne({

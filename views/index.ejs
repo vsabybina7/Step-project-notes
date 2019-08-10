@@ -18,7 +18,7 @@
         <div class="col-6">
             <!-- Заголовок -->
             <h2>
-                <span class="badge badge-secondary">Notes List</span>
+                <span class="badge badge-secondary">Notes and lists</span>
             </h2>
         </div>
         <!-- Колонка -->
@@ -42,7 +42,8 @@
                         </div>
                         <h5 class="card-title"><%= el.title %></h5>
                         <p class="card-text list-text bg-warning"><%= el.text %></p>
-                        <button class="btn btn-success edit-btn " data-id="<%= el.id %>" >Edit</button>
+                        <button class="btn btn-success edit-btn " data-id="<%= el.id %>">Edit</button>
+                        <button class="btn btn-success btn-show" data-id="<%= el.id %>">Show note</button>
                     </div>
                 </div>
             </div>
@@ -62,7 +63,10 @@
 
                         </p>
 
+
+
                         <button class="btn btn-success edit-btn " data-id="<%= el.id %>" >Edit</button>
+                        <button class="btn btn-success btn-show" data-id="<%= el.id %>">Show list</button>
                     </div>
                 </div>
             </div>
