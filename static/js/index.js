@@ -172,8 +172,15 @@ async function editNote(id){
         id: id,
         type: 'note',
         title: getTitleVal(id, true),
-        text: getTextVal(id, true)
+        // text: getTextVal(id, true)
     }
+    console.log(data)
+
+    let i = 1;
+    getTextValList(id,true).forEach((elem)=>{
+        data[`text${i}`]=elem;
+        i++;
+    });
     console.log(data)
     let req = await fetch("http://localhost:3000/edit", {
         method: "POST",
@@ -182,12 +189,11 @@ async function editNote(id){
         },
         body: JSON.stringify(data)
     })
-
     let answer = await req.json()
     console.log(answer)
-    if(answer.edited) {
+    if(answer.created){
         let currentCol = getCol(id)
-        let newCol = getCardTemplate(data.id, data.title, data.text, false)
+        let newCol = getCardTemplateList(data.id, data.title, data.text, false)
         currentCol.innerHTML = newCol.innerHTML
     }
 }
