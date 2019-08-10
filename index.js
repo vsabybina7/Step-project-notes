@@ -47,6 +47,7 @@ res.render("index", {
 
 // app.get('/note',(req,res)=>{
 //     res.render('note');
+
 // });
 //
 // app.get('/list',(req,res)=>{
