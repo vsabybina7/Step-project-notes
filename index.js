@@ -57,7 +57,7 @@ res.render("index", {
 
 app.post("/delete", async (req, res) => {
     // Выводим данные запроса
-    console.log(req.body.id)
+    // console.log(req.body.id)
     try {
         // Удаляем заметку по id
         await app.db.deleteOne({

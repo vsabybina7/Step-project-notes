@@ -299,6 +299,12 @@ function getTextVal(id, editStatus){
     // console.log(`'inputs text' ${elemList.value}`);
 }
 
+// function getInputVal(id, editStatus) {
+//     const inputsList = document.querySelector(`.card-body[data-id="${id}"] input`)
+//     return console.log(inputsList);
+// }
+// getInputVal()
+
 function getCol(id){
     return document.querySelector(`.card-body[data-id="${id}"]`).parentNode.parentNode
 }
@@ -377,12 +383,12 @@ document.addEventListener('click',(event)=>{
         let count = 1;
         console.log(parent);
 
-        const divForInputs =parent.querySelector('#listField')
+        const divForInputs = parent.querySelector('#listField')
         divForInputs.className = "custom-control custom-checkbox my-1 mr-sm-2"
 
         const creatInput = document.createElement('input')
         creatInput.type = 'checkbox'
-        divForInputs.appendChild(creatInput)
+        // divForInputs.appendChild(creatInput)
         // creatInput.className = 'custom-control-input'
         // creatInput.style.position=' absolute '
         // creatInput.style.zIndex= '1 '
@@ -399,6 +405,7 @@ document.addEventListener('click',(event)=>{
         // labelForInput.htmlFor = 'id' + count
         labelForInput.appendChild(document.createTextNode(''));
 
+        // count++
         const inputForLabel = document.createElement('input')
         inputForLabel.className = "form-control"
         inputForLabel.type = 'text'
@@ -413,7 +420,6 @@ document.addEventListener('click',(event)=>{
         buttonDelete.innerText = " - "
         labelForInput.appendChild(buttonDelete)
 
-        count ++
         buttonDelete.addEventListener('click', (e) => {
             if(e.target) {
                 creatInput.remove()
