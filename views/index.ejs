@@ -63,7 +63,12 @@
 
                         </p>
 
-
+                        <% for(let key in el) { %>
+                        <% if(key !== '_id' && key !== 'id' && key !== 'type' && key !== 'text1' && key !== 'title'){ %>
+                        <div class="list-item-container d-flex align-items-center mb-2" data-listName="<%=key%>">
+                            <input type="checkbox" class="list-checkbox">
+                            <p class="ml-3 my-0"><%= el[key] %></p></div>
+                        <% }} %>
 
                         <button class="btn btn-success edit-btn " data-id="<%= el.id %>" >Edit</button>
                         <button class="btn btn-success btn-show" data-id="<%= el.id %>">Show list</button>
