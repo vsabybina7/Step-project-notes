@@ -307,7 +307,7 @@ function getTextVal(id, editStatus){
 }
 
 function getTextValList(id, editStatus){
-    const tagList = editStatus ? ".form-control" : "p"
+    const tagList = editStatus ? ".input-inlist" : "p"
     const elemList = []
     const el = document.querySelectorAll(`.card-body[data-id="${id}"] ${tagList}`)
     // elemList.push(el)
@@ -355,7 +355,7 @@ function getCardTemplateList(id, title, text, editStatus){
             
                 <input type="checkbox" class="custom-control-input" id="id0">
                 <label class="custom-control-label" for="id0">
-                    <input class="form-control" id = "inputText" data-set="set0" name="value[]" value="${text}">
+                    <input class="form-control input-inlist" id = "inputText" data-set="set0" name="value[]" value="${text}">
                     <button class="badge badge-primary"> - </button> 
                 </label>              
             </div>              
@@ -436,7 +436,7 @@ document.addEventListener('click',(event)=>{
         label.appendChild(document.createTextNode(''));
 
         const input = document.createElement('input')
-        input.className = "form-control"
+        input.className = "form-control, input-inlist"
         input.type = 'text'
         input.setAttribute('data-set', 'set' + count)
         // input.name = 'value[]'
