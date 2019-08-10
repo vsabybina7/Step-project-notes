@@ -33,15 +33,15 @@ addListBtn.addEventListener('click', ()=>{
 //Слушатель нажатия на кнопку (удалить, сохранить, редактировать)
 notesList.addEventListener('click', function(e) {
     // e.preventDefault();
-    console.log('this is noteList event');
+    // console.log('this is noteList event');
     // Обьявляем ай ди заметки
     let id = e.target.dataset.id
-    console.log(id);
+    // console.log(id);
     if(e.target.classList.contains('btn-danger')) {
         // console.log('delete')
         deleteNote(id)
     } else if(e.target.classList.contains('save-btn')){
-        console.log('save')
+        // console.log('save')
         if(getCardBody(id).dataset.edit){
             let parent = e.target.closest('.card-body');
 
@@ -140,8 +140,16 @@ async function createNoteList(id){
         id: id,
         type: 'list',
         title: getTitleVal(id, true),
-        text: getTextValList(id, true)
+        // text: getTextValList(id, true)
+        // text1: await
+
     }
+
+    let i = 1;
+    getTextValList(id,true).forEach((elem)=>{
+        data[`text${i}`]=elem;
+        i++;
+    });
     console.log(data)
     let req = await fetch("http://localhost:3000/create", {
         method: "POST",
@@ -191,7 +199,7 @@ async function editNoteList(id){
         title: getTitleVal(id, true),
         text: getTextValList(id, true)
     }
-    console.log(data)
+    // console.log(data)
     let req = await fetch("http://localhost:3000/edit", {
         method: "POST",
         headers: {
@@ -201,7 +209,7 @@ async function editNoteList(id){
     })
 
     let answer = await req.json()
-    console.log(answer)
+    // console.log(answer)
     if(answer.edited) {
         let currentCol = getCol(id)
         let newCol = getCardTemplateList(data.id, data.title, data.text, false)
@@ -298,15 +306,25 @@ function getTextVal(id, editStatus){
     }
 }
 
-
 function getTextValList(id, editStatus){
-    const tagList = editStatus ? "#inputText" : "p"
+    const tagList = editStatus ? ".form-control" : "p"
     const elemList = []
-    const el = document.querySelector(`.card-body[data-id="${id}"] ${tagList}`)
-    elemList.push(el)
+    const el = document.querySelectorAll(`.card-body[data-id="${id}"] ${tagList}`)
+    // elemList.push(el)
+
+    // console.log(el);
+    
+    el.forEach(function (element) {
+        let obj ={
+            value: element.value,
+            status: element.checked
+        };
+        elemList.push(obj);
+    });
+    // console.log(elemList);
 
     if(editStatus){
-            return el.value
+            return elemList
     }
     else{
             return el.innerText
@@ -342,7 +360,7 @@ function getCardTemplateList(id, title, text, editStatus){
                 </label>              
             </div>              
 </div>`
-    console.log(`"list" ${text}`);
+    // console.log(`"list" ${text}`);
 
     const textElems = `
             <h5 class="card-title">${title}</h5>
@@ -389,7 +407,7 @@ document.addEventListener('click',(event)=>{
     if(event.target.id === 'checkPlus'){
         const parent = event.target.closest('.card');
 
-        console.log(parent);
+        // console.log(parent);
         const formInline = parent.querySelector('#listField')
 
 
