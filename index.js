@@ -85,7 +85,7 @@ app.post("/delete", async (req, res) => {
 
 app.post("/create", async (req, res) => {
     // Выводим данные из body в post
-    console.log(req.body)
+    // console.log(req.body)
     try {
         // Создаем в базе заметку
         await app.db.insertOne({
@@ -97,7 +97,7 @@ app.post("/create", async (req, res) => {
     res.json({created: true})
 })
 
-app.post("/edit", async (req, res) => {
+app.post("/editnote", async (req, res) => {
     // Выводим данные из body в post
     console.log(req.body)
     try {
@@ -111,6 +111,37 @@ app.post("/edit", async (req, res) => {
                     text: req.body.text
                 }
             })
+    } catch (err) {
+        console.log(err)
+    }
+    res.json({edited: true})
+})
+
+app.post("/editlist", async (req, res) => {
+    // Выводим данные из body в post
+
+
+    try {
+        // let i = 1;
+        // console.log(getTextValList);
+        // getTextValList(id, true).forEach((elem) => {
+        //     data[`text${i}`] = elem;
+        //     i++;
+        // });
+        // Создаем в базе заметку
+        for(let i = 1; i <= req.body.inputCounter; i++) {
+            await app.db.updateOne({
+                    id: req.body.id,
+                },
+                {
+                    $set: {
+                        title: req.body.title,
+                        [`text${i}`]: req.body[`text${i}`]
+                        // text: req.body.text
+                    }
+                })
+            // i++;
+        }
     } catch (err) {
         console.log(err)
     }

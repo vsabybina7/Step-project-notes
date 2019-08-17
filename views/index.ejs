@@ -32,7 +32,7 @@
     <div class="row mt-5" id="notesList">
         <!-- Вывод списка заметок -->
         <% notes.forEach((el)=>{ %>
-            <% if (el.type == "note") { %>
+            <% if (el.type === "note") { %>
 
             <div class="col-4">
                 <div class="card bg-warning">
@@ -47,7 +47,7 @@
                     </div>
                 </div>
             </div>
-            <% } else if (el.type == 'list') { %>
+            <% } else if (el.type === 'list') { %>
             <div class="col-4">
                 <div class="card">
                     <div class="card-body listClass" data-id="<%= el.id %>">
@@ -64,7 +64,7 @@
                             <p class="ml-3 my-0"><%= el[key].value %></p></div>
                         <% }} %>
 
-                        <button class="btn btn-success edit-btn " data-id="<%= el.id %>" >Edit</button>
+                        <button class="btn btn-success edit-btn" data-id="<%= el.id %>">Edit</button>
                         <button class="btn btn-success btn-show" data-id="<%= el.id %>">Show list</button>
                     </div>
                 </div>
