@@ -119,6 +119,7 @@ app.post("/editnote", async (req, res) => {
 
 app.post("/editlist", async (req, res) => {
     // Выводим данные из body в post
+    console.log(req.body);
 
 
     try {

@@ -114,7 +114,7 @@ async function createNote(id) {
         title: getTitleVal(id, true),
         text: getTextVal(id, true)
     }
-    console.log(data)
+    // console.log(data)
     let req = await fetch("http://localhost:3000/create", {
         method: "POST",
         headers: {
@@ -124,7 +124,7 @@ async function createNote(id) {
     })
 
     let answer = await req.json()
-    console.log(answer)
+    // console.log(answer)
     if (answer.created) {
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
@@ -174,7 +174,7 @@ async function editNote(id) {
         title: getTitleVal(id, true),
         text: getTextVal(id, true)
     }
-    console.log(data)
+    // console.log(data)
     let req = await fetch("http://localhost:3000/editnote", {
         method: "POST",
         headers: {
@@ -184,7 +184,7 @@ async function editNote(id) {
     })
 
     let answer = await req.json()
-    console.log(answer)
+    // console.log(answer)
     if (answer.edited) {
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
@@ -201,6 +201,8 @@ async function editNoteList(id) {
         // text: getTextValList(id, true)
     }
     // console.log(getTextValList);
+    console.log("-----------");
+    console.log(getTextValListEdit(id, true));
     getTextValListEdit(id, true).forEach((elem) => {
         data[`text${i}`] = elem;
         i++;
@@ -260,7 +262,7 @@ function getCardTemplate(id, title, text, editStatus) {
             <h5 class="card-title">${title}</h5>
             <p class="card-text">${text}</p>`
 
-    console.log(`"card" ${text}`);
+    // console.log(`"card" ${text}`);
 
     let submitBtn,
         neededContentElems
@@ -306,7 +308,7 @@ function getTitleVal(id, editStatus) {
 function getTextVal(id, editStatus) {
     const tag = editStatus ? "textarea" : "p"
     const elem = document.querySelector(`.card-body[data-id="${id}"] ${tag}`)
-    console.log(elem);
+    // console.log(elem);
 
     if (editStatus) {
         return elem.value
@@ -316,13 +318,13 @@ function getTextVal(id, editStatus) {
 }
 
 function getTextValListSave(id, editStatus) {
-    console.log('!!!!', editStatus);
+    // console.log('!!!!', editStatus);
     const tagList = editStatus ? ".input-inlist" : "p"
     const elemList = []
     const el = document.querySelectorAll(`.card-body[data-id="${id}"] ${tagList}`)
     // elemList.push(el)
 
-    console.log(el);
+    // console.log(el);
 
     el.forEach(function (element) {
         // console.log("this is " + element.value);
@@ -338,13 +340,13 @@ function getTextValListSave(id, editStatus) {
 }
 
 function getTextValListEdit(id, editStatus) {
-    console.log('!!!!', editStatus);
-    const tagList = editStatus ? "p" : ".input-inlist"
+    // console.log('!!!!', editStatus);
+    const tagList = editStatus ? "p" : ".input-inlist";
     const elemList = []
     const el = document.querySelectorAll(`.card-body[data-id="${id}"] ${tagList}`)
     // elemList.push(el)
 
-    console.log(el);
+    // console.log(el);
 
     el.forEach(function (element) {
         // console.log("this is " + element.value);
@@ -354,7 +356,9 @@ function getTextValListEdit(id, editStatus) {
         };
         elemList.push(obj);
     });
-    // console.log(elemList);
+    console.log(id);
+    console.log("elem list");
+    console.log(elemList);
 
     return elemList
 }
@@ -369,10 +373,10 @@ function getCardBody(id) {
 
 // функции для добавления карточек с заметками
 function getCardTemplateList(id, title, text, editStatus) {
-    console.log(editStatus);
-    console.log("id", id);
-    console.log("title", title);
-    console.log('text', text);
+    // console.log(editStatus);
+    // console.log("id", id);
+    // console.log("title", title);
+    // console.log('text', text);
     let inputElems = `
 <div class="form-inline" id="listField">
             <div class="my-1 mr-2" >
@@ -396,7 +400,7 @@ function getCardTemplateList(id, title, text, editStatus) {
 </div>`
     for(let key in text){
         if(key !== '_id' && key !== 'id' && key !== 'type' && key !== 'title'){
-            inputElems+=`<input class="card-text" value=${text[key].value}>`
+            inputElems+=`<input class="card-text input-list" value=${text[key].value}>`
         }
     }
 
@@ -416,7 +420,7 @@ function getCardTemplateList(id, title, text, editStatus) {
 
     let submitBtn,
         neededContentElems;
-    console.log(editStatus);
+    // console.log(editStatus);
 
     if (editStatus) {
 
