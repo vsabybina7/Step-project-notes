@@ -63,7 +63,7 @@ notesList.addEventListener('click', function (e) {
 
         if (parent.classList.contains('listClass')) {
             let currentCol = getCol(id)
-            let newCol = getCardTemplateList(id, getTitleVal(id, false), getTextValListEdit(id, true), true);
+            let newCol = getCardTemplateList(id, getTitleVal(id, false), getTextValListEdit(id, false), true);
             currentCol.innerHTML = newCol.innerHTML
             getCardBody(id).setAttribute("data-edit", "true");
         } else {
@@ -324,7 +324,7 @@ function getTextValListSave(id, editStatus) {
     const el = document.querySelectorAll(`.card-body[data-id="${id}"] ${tagList}`)
     // elemList.push(el)
 
-    // console.log(el);
+    console.log(el);
 
     el.forEach(function (element) {
         // console.log("this is " + element.value);
@@ -334,33 +334,72 @@ function getTextValListSave(id, editStatus) {
         };
         elemList.push(obj);
     });
-    // console.log(elemList);
+    console.log('after save', elemList);
 
     return elemList
 }
 
 function getTextValListEdit(id, editStatus) {
-    // console.log('!!!!', editStatus);
-    const tagList = editStatus ? "p" : ".input-inlist";
+    console.log('!!!!', editStatus);
+    const tagList = editStatus ? ".input-list" : "p";
     const elemList = []
+    const elemListEdited = []
     const el = document.querySelectorAll(`.card-body[data-id="${id}"] ${tagList}`)
     // elemList.push(el)
 
-    // console.log(el);
+    console.log(el);
 
-    el.forEach(function (element) {
-        // console.log("this is " + element.value);
-        let obj = {
-            value: element.textContent,
-            status: element.previousElementSibling.checked
-        };
-        elemList.push(obj);
-    });
-    console.log(id);
-    console.log("elem list");
-    console.log(elemList);
+    // el.forEach(function (element) {
+    //     // console.log("this is " + element.value);
+    //     let obj = {
+    //         value: element.textContent,
+    //         status: element.previousElementSibling.checked
+    //     };
+    //     elemList.push(obj);
+    //     // editStatus = false
+    // });
+    //
+    // el.forEach(function (element) {
+    //     // console.log("this is " + element.value);
+    //     let obj = {
+    //         value: element.innerText
+    //         // status: element.checked
+    //     };
+    //     elemListEdited.push(obj);
+    //     // editStatus = false
+    // });
 
-    return elemList
+    // console.log(id);
+    // console.log("elem list");
+
+    console.log(editStatus);
+
+    if (!editStatus) {
+        el.forEach(function (element) {
+            // console.log("this is " + element.value);
+            let obj = {
+                value: element.textContent,
+                status: element.previousElementSibling.checked
+            };
+            elemList.push(obj);
+            // editStatus = false
+            editStatus=true
+        });
+    console.log('edit btn pressed editing', elemList);
+        return elemList
+    } else {
+        el.forEach(function (element) {
+            // console.log("this is " + element.value);
+            let obj = {
+                value: element.value
+                // status: element.checked
+            };
+            elemListEdited.push(obj);
+            // editStatus = false
+        });
+    console.log('saved btn pressed', elemListEdited);
+        return elemListEdited
+    }
 }
 
 function getCol(id) {

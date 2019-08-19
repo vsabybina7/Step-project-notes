@@ -99,7 +99,7 @@ app.post("/create", async (req, res) => {
 
 app.post("/editnote", async (req, res) => {
     // Выводим данные из body в post
-    console.log(req.body)
+    console.log('NOTE EDITED', req.body)
     try {
         // Создаем в базе заметку
         await app.db.updateOne({
@@ -119,16 +119,10 @@ app.post("/editnote", async (req, res) => {
 
 app.post("/editlist", async (req, res) => {
     // Выводим данные из body в post
-    console.log(req.body);
+    console.log('list edited', req.body);
 
 
     try {
-        // let i = 1;
-        // console.log(getTextValList);
-        // getTextValList(id, true).forEach((elem) => {
-        //     data[`text${i}`] = elem;
-        //     i++;
-        // });
         // Создаем в базе заметку
         for(let i = 1; i <= req.body.inputCounter; i++) {
             await app.db.updateOne({
