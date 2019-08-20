@@ -393,12 +393,25 @@ function getCardTemplateList(id, title, text, editStatus) {
     let textElems = `
             <h5 class="card-title">${title}</h5>`
 
+    const buttonDelete = document.createElement('button')
+    buttonDelete.className = 'badge badge-primary'
+    buttonDelete.innerText = " - "
+    buttonDelete.id = "listTaskDelete"
+    // console.log(buttonDelete);
+
     for(let key in text){
         if(key !== '_id' && key !== 'id' && key !== 'type' && key !== 'title'){
-            textElems+=`<p class="card-text">${text[key].value}</p>`
-
+            textElems+=`<p class="card-text">${text[key].value}</p>
+            <button class="badge-primary text-right"id="listTaskDelete" >-</button>`
         }
     }
+
+            console.log(textElems);
+    // buttonDelete.addEventListener('click', () => {
+    //     textElems.remove();
+    //     buttonDelete.remove()
+    // })
+
 
     let submitBtn,
         neededContentElems
