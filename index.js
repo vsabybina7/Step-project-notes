@@ -124,7 +124,7 @@ app.post("/editlist", async (req, res) => {
 
     try {
         // Создаем в базе заметку
-        for(let i = 1; i <= req.body.inputCounter; i++) {
+    for(let i = 1; i <= req.body.inputCounter; i++) {
             await app.db.updateOne({
                     id: req.body.id,
                 },
@@ -132,10 +132,8 @@ app.post("/editlist", async (req, res) => {
                     $set: {
                         title: req.body.title,
                         [`text${i}`]: req.body[`text${i}`]
-                        // text: req.body.text
                     }
                 })
-            // i++;
         }
     } catch (err) {
         console.log(err)

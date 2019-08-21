@@ -74,8 +74,6 @@ notesList.addEventListener('click', function (e) {
         }
     } else if (e.target.classList.contains('btn-show')) {
 
-        // window.location.href = `/${id}`
-
         let parent = e.target.closest('.card-body');
 
         if (parent.classList.contains('listClass')) {
@@ -201,14 +199,14 @@ async function editNoteList(id) {
         // text: getTextValList(id, true)
     }
     // console.log(getTextValList);
-    console.log("-----------");
-    console.log(getTextValListEdit(id, true));
+    // console.log("-----------", getTextValListEdit(id, true));
+
     getTextValListEdit(id, true).forEach((elem) => {
         data[`text${i}`] = elem;
         i++;
     });
     // console.log(data)
-    data.inputCounter = i-1;
+    data.inputCounter = i - 1;
     let req = await fetch("http://localhost:3000/editlist", {
         method: "POST",
         headers: {
@@ -324,7 +322,7 @@ function getTextValListSave(id, editStatus) {
     const el = document.querySelectorAll(`.card-body[data-id="${id}"] ${tagList}`)
     // elemList.push(el)
 
-    console.log(el);
+    // console.log(el);
 
     el.forEach(function (element) {
         // console.log("this is " + element.value);
@@ -345,34 +343,6 @@ function getTextValListEdit(id, editStatus) {
     const elemList = []
     const elemListEdited = []
     const el = document.querySelectorAll(`.card-body[data-id="${id}"] ${tagList}`)
-    // elemList.push(el)
-
-    console.log(el);
-
-    // el.forEach(function (element) {
-    //     // console.log("this is " + element.value);
-    //     let obj = {
-    //         value: element.textContent,
-    //         status: element.previousElementSibling.checked
-    //     };
-    //     elemList.push(obj);
-    //     // editStatus = false
-    // });
-    //
-    // el.forEach(function (element) {
-    //     // console.log("this is " + element.value);
-    //     let obj = {
-    //         value: element.innerText
-    //         // status: element.checked
-    //     };
-    //     elemListEdited.push(obj);
-    //     // editStatus = false
-    // });
-
-    // console.log(id);
-    // console.log("elem list");
-
-    console.log(editStatus);
 
     if (!editStatus) {
         el.forEach(function (element) {
@@ -383,9 +353,9 @@ function getTextValListEdit(id, editStatus) {
             };
             elemList.push(obj);
             // editStatus = false
-            editStatus=true
+            editStatus = true
         });
-    console.log('edit btn pressed editing', elemList);
+        console.log('edit btn pressed editing', elemList);
         return elemList
     } else {
         el.forEach(function (element) {
@@ -397,7 +367,7 @@ function getTextValListEdit(id, editStatus) {
             elemListEdited.push(obj);
             // editStatus = false
         });
-    console.log('saved btn pressed', elemListEdited);
+        console.log('saved btn pressed', elemListEdited);
         return elemListEdited
     }
 }
@@ -412,59 +382,47 @@ function getCardBody(id) {
 
 // функции для добавления карточек с заметками
 function getCardTemplateList(id, title, text, editStatus) {
-    // console.log(editStatus);
-    // console.log("id", id);
-    // console.log("title", title);
-    // console.log('text', text);
+
     let inputElems = `
 <div class="form-inline" id="listField">
             <div class="my-1 mr-2" >
                 <label for="note-title" style="color: dodgerblue; font-weight: bold; margin-left: 25px">Title</label>
                 <input type="text" class="form-control" id="note-title" value="${title}" style="margin-left: 25px">
-            </div>
-
-            <div class="custom-control custom-checkbox my-1 mr-sm-2" ></div>
-
-            <div class="custom-control custom-checkbox my-1 mr-sm-2" >
-
-                <input type="checkbox" class="custom-control-input" id="id0">
-                <label class="custom-control-label" for="id0">
-                    <!--<input class="form-control input-inlist" id = "inputText" data-set="set0" name="value[]" value="${text}">-->
-                    
-                    
-                    
-                    <button class="badge badge-primary"> - </button>
-                </label>
-            </div>
+            </div>        
 </div>`
-    for(let key in text){
-        if(key !== '_id' && key !== 'id' && key !== 'type' && key !== 'title'){
-            inputElems+=`<input class="card-text input-list" value=${text[key].value}>`
+    for (let key in text) {
+        if (key !== '_id' && key !== 'id' && key !== 'type' && key !== 'title') {
+            console.log('text', key);
+            inputElems += `
+            <div class="my-1 mr-2" >
+                <input type="checkbox" class="list-checkbox">
+                <input class="card-text input-list" value=${text[key].value}>
+                <button id="deleteEditInput" class="badge badge-primary"> - </button>
+            </div>`
         }
     }
-
 
     let textElems = `
             <h5 class="card-title">${title}</h5>`
 
-
-
-    for(let key in text){
-        if(key !== '_id' && key !== 'id' && key !== 'type' && key !== 'title'){
-            textElems+=`<p class="card-text">${text[key].value}</p>`
-
+    for (let key in text) {
+        if (key !== '_id' && key !== 'id' && key !== 'type' && key !== 'title' && key !== 'inputCounter') {
+            textElems += `
+             <div class="my-1 mr-2" >
+                <input type="checkbox" class="list-checkbox">
+                <p class="card-text" style="display: inline-block; margin-left: 8px">${text[key].value}</p>
+             </div>`
         }
     }
-    // console.log(`"list" ${textElems}`);
 
     let submitBtn,
         neededContentElems;
-    // console.log(editStatus);
 
     if (editStatus) {
 
-        submitBtn = `<button class="btn btn-primary save-btn" data-id="${id}" style="margin-left: 25px">Save</button>
- <button class="badge badge-primary text-right" id="checkPlus" style="margin-left:100px; "> + </button> 
+        submitBtn = `
+<button class="btn btn-primary save-btn" data-id="${id}" style="margin-left: 25px">Save</button>
+<button class="badge badge-primary text-right" id="checkPlus" style="margin-left: 100px; "> + </button> 
 `
         neededContentElems = inputElems;
 
@@ -473,7 +431,7 @@ function getCardTemplateList(id, title, text, editStatus) {
                      <button class="btn btn-success btn-show" data-id="${id}">Show list</button>`
 
         neededContentElems = textElems
-        // console.log(neededContentElems);
+
     }
     const cardContainer = `
             <div class="card">
@@ -496,7 +454,7 @@ function getCardTemplateList(id, title, text, editStatus) {
 
 }
 
-//добавление инпутов для заметок
+//добавление/удаление инпутов для заметок
 document.addEventListener('click', (event) => {
     let count = 1;
     if (event.target.id === 'checkPlus') {
@@ -505,23 +463,14 @@ document.addEventListener('click', (event) => {
         // console.log(parent);
         const formInline = parent.querySelector('#listField')
 
-
-        // const formInline = document.getElementsByClassName('form-inline')
-
         const divForInputs = document.createElement('div')
         divForInputs.className = "custom-control custom-checkbox my-1 mr-sm-2"
 
         const checkbox = document.createElement('input')
         checkbox.type = 'checkbox'
-        // divForInputs.appendChild(checkbox)
         checkbox.className = 'custom-control-input'
-        // creatInput.style.position=' absolute '
-        // creatInput.style.zIndex= '1 '
-        // creatInput.style.opacity ='0 '
-        // creatInput.style.left = '2px'
-        // creatInput.style.top='6px'
+
         checkbox.name = 'value[]'
-        // checkbox.value = 'value'
         checkbox.id = 'id' + count
         divForInputs.appendChild(checkbox)
 
@@ -534,7 +483,6 @@ document.addEventListener('click', (event) => {
         input.className = "form-control input-inlist"
         input.type = 'text'
         input.setAttribute('data-set', 'set' + count)
-        // input.name = 'value[]'
 
         label.appendChild(input)
         divForInputs.appendChild(label)
@@ -552,6 +500,12 @@ document.addEventListener('click', (event) => {
                 label.remove()
             }
         })
+    }
+    if (event.target.id === 'deleteEditInput') {
+
+        const parent = event.target.closest('.my-1');
+
+        parent.remove()
     }
 
 })
