@@ -10,13 +10,26 @@
 </head>
 <body>
 
-<div class="card" style="width: 18rem;">
-    <div class="card-body">
+
+
+<div class="card" style="width: 18rem; position: absolute; top: 30%; left: 40%">
+    <h6>List</h6>
+    <div class="card-body listClass" data-id="${id}" style="text-align: center;">
         <h5 class="card-title"><%= list.title %></h5>
-        <p class="card-text"><%= list.text %></p>
-        <a href="/" class="btn btn-primary">Go</a>
+
+        <% for(let key in list) { %>
+        <% if(key !== '_id' && key !== 'id' && key !== 'type' && key !== 'title'){ %>
+        <div class="list-item-container d-flex align-items-center mb-2" data-listName="<%=key%>">
+
+            <input type="checkbox" class="list-checkbox">
+            <p class="ml-3 my-0"><%= list[key].value %></p>
+        </div>
+        <% }} %>
+
     </div>
+    <a href="/" class="btn btn-primary">To the main page</a>
 </div>
-<!--<script src="/js/index.js"></script>-->
+
+
 </body>
 </html>

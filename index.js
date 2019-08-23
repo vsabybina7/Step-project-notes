@@ -1,5 +1,5 @@
 const express = require('express')
-const port = 3000
+const port = process.env.POST || 3000
 const app = express()
 
 const bodyParser = require('body-parser')
@@ -13,13 +13,10 @@ const uri = "mongodb+srv://admin:admin@cluster0-dpwsd.mongodb.net/test?retryWrit
 
 const client = new MongoClient(uri, { useNewUrlParser: true });
 
-
 client.connect(err => {
     console.log('BD connect error: ', err)
     const collection = client.db("Step_3").collection("Notes");
     app.db = collection
-
-//   client.close();
 });
 
 app.use(express.static(__dirname + "/static"))
@@ -29,35 +26,20 @@ app.set("view engine", "ejs")
 app.get("/", async (req, res)=>{
     let notes = []
     let lists = []
-await app.db.find({}).forEach((el) => {
-    notes.push(el)
-});
-await app.db.find({}).forEach((elem) => {
-    lists.push(elem)
-});
-    // console.log('============', notes, lists);
-// console.log(notes);
-// console.log(lists);
-res.render("index", {
-    notes,
-    lists
+    await app.db.find({}).forEach((el) => {
+        notes.push(el)
+    });
+    await app.db.find({}).forEach((el) => {
+        lists.push(el)
+    });
+    res.render("index", {
+        notes,
+        lists
+    })
 })
-
-})
-
-// app.get('/note',(req,res)=>{
-//     res.render('note');
-// });
-//
-// app.get('/list',(req,res)=>{
-//     res.render('list');
-// });
-
-
 
 app.post("/delete", async (req, res) => {
     // Выводим данные запроса
-    console.log(req.body.id)
     try {
         // Удаляем заметку по id
         await app.db.deleteOne({
@@ -72,7 +54,6 @@ app.post("/delete", async (req, res) => {
 
 app.post("/create", async (req, res) => {
     // Выводим данные из body в post
-    console.log(req.body)
     try {
         // Создаем в базе заметку
         await app.db.insertOne({
@@ -84,9 +65,8 @@ app.post("/create", async (req, res) => {
     res.json({created: true})
 })
 
-app.post("/edit", async (req, res) => {
+app.post("/editnote", async (req, res) => {
     // Выводим данные из body в post
-    console.log(req.body)
     try {
         // Создаем в базе заметку
         await app.db.updateOne({
@@ -98,6 +78,28 @@ app.post("/edit", async (req, res) => {
                     text: req.body.text
                 }
             })
+    } catch (err) {
+        console.log(err)
+    }
+    res.json({edited: true})
+})
+
+app.post("/editlist", async (req, res) => {
+    // Выводим данные из body в post
+
+    try {
+        // Создаем в базе заметку
+    for(let i = 1; i <= req.body.inputCounter; i++) {
+            await app.db.updateOne({
+                    id: req.body.id,
+                },
+                {
+                    $set: {
+                        title: req.body.title,
+                        [`text${i}`]: req.body[`text${i}`]
+                    }
+                })
+        }
     } catch (err) {
         console.log(err)
     }
@@ -117,12 +119,14 @@ app.get('/edit/note/:id', async (req, res) => {
 
 app.get('/edit/list/:id', async (req, res) => {
     let list;
-    await app.db.find({id: req.params.id}).forEach((elem) => {
-        list = elem
+    await app.db.find({id: req.params.id}).forEach((el) => {
+        list = el
 })
     res.render("list", {list})
 
 })
+
+
 
 app.listen(port, ()=>{
     console.log("hello in console")
