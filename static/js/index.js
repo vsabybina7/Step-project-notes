@@ -110,7 +110,7 @@ async function createNote(id) {
         title: getTitleVal(id, true),
         text: getTextVal(id, true)
     }
-    let req = await fetch("http://localhost:3000/create", {
+    let req = await fetch("https://my-first-notes.herokuapp.com/create", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -141,7 +141,7 @@ async function createNoteList(id) {
         i++;
     });
 
-    let req = await fetch("http://localhost:3000/create", {
+    let req = await fetch("https://my-first-notes.herokuapp.com/create", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -167,7 +167,7 @@ async function editNote(id) {
         text: getTextVal(id, true)
     }
 
-    let req = await fetch("http://localhost:3000/editnote", {
+    let req = await fetch("https://my-first-notes.herokuapp.com/editnote", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -198,7 +198,7 @@ async function editNoteList(id) {
         i++;
     });
     data.inputCounter = i - 1;
-    let req = await fetch("http://localhost:3000/editlist", {
+    let req = await fetch("https://my-first-notes.herokuapp.com/editlist", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -219,7 +219,7 @@ async function deleteNote(id) {
     let data = {
         id: id
     }
-    let req = await fetch("http://localhost:3000/delete", {
+    let req = await fetch("https://my-first-notes.herokuapp.com/delete", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
