@@ -38,39 +38,8 @@ app.get("/", async (req, res)=>{
     })
 })
 
-// app.get('/notes/:id', async (req,res)=>{
-//     try {
-//         const data = await db.find(req.params.id);
-//         res.render('pages/notes/edit', {
-//             id: req.params.id,
-//             type: note,
-//             title: data.title,
-//             content: data.text
-//         });
-//     } catch (e) {
-//         console.log(e);
-//     }
-// });
-//
-// app.get('/lists/:id', async (req,res)=>{
-//     try {
-//         const data = await db.find(req.params.id);
-//         res.render('pages/lists/edit', {
-//             id: req.params.id,
-//             type: list,
-//             title: data.title,
-//             tasks: data.text
-//         });
-//     } catch (e) {
-//         console.log(e);
-//     }
-// });
-
-
-
 app.post("/delete", async (req, res) => {
     // Выводим данные запроса
-    // console.log(req.body.id)
     try {
         // Удаляем заметку по id
         await app.db.deleteOne({
@@ -85,7 +54,6 @@ app.post("/delete", async (req, res) => {
 
 app.post("/create", async (req, res) => {
     // Выводим данные из body в post
-    // console.log(req.body)
     try {
         // Создаем в базе заметку
         await app.db.insertOne({
@@ -99,7 +67,6 @@ app.post("/create", async (req, res) => {
 
 app.post("/editnote", async (req, res) => {
     // Выводим данные из body в post
-    console.log('NOTE EDITED', req.body)
     try {
         // Создаем в базе заметку
         await app.db.updateOne({
@@ -119,12 +86,10 @@ app.post("/editnote", async (req, res) => {
 
 app.post("/editlist", async (req, res) => {
     // Выводим данные из body в post
-    console.log('list edited', req.body);
-
 
     try {
         // Создаем в базе заметку
-        for(let i = 1; i <= req.body.inputCounter; i++) {
+    for(let i = 1; i <= req.body.inputCounter; i++) {
             await app.db.updateOne({
                     id: req.body.id,
                 },
@@ -132,10 +97,8 @@ app.post("/editlist", async (req, res) => {
                     $set: {
                         title: req.body.title,
                         [`text${i}`]: req.body[`text${i}`]
-                        // text: req.body.text
                     }
                 })
-            // i++;
         }
     } catch (err) {
         console.log(err)
