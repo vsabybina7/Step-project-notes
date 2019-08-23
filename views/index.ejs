@@ -6,8 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/style.css">
 
-    <title>Document</title>
+
+    <title>Step3</title>
 </head>
 <body>
 
@@ -61,7 +63,8 @@
                         <div class="list-item-container d-flex align-items-center mb-2" data-listName="<%=key%>">
 
                             <input type="checkbox" class="list-checkbox">
-                            <p class="ml-3 my-0"><%= el[key].value %></p></div>
+                            <p class="ml-3 my-0"><%= el[key].value %></p>
+                        </div>
                         <% }} %>
 
                         <button class="btn btn-success edit-btn" data-id="<%= el.id %>">Edit</button>
@@ -74,7 +77,6 @@
     </div>
 </div>
 <script src="/js/index.js"></script>
-<!--<script src="/js/index_2.js"></script>-->
 
 </body>
 </html>

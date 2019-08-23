@@ -21,32 +21,43 @@ addListBtn.addEventListener('click', () => {
     // Список добавляем новую карточку с инпутами
     let id = Date.now()
     notesList.appendChild(getCardTemplateList(id, "", "", true))
+    // добавляем плюс в последнюю карточку
+    let plus = document.createElement('button')
+    plus.className = 'badge badge-primary text-right'
+    plus.id = 'checkPlus'
+    plus.style.marginLeft = '100px'
+    plus.innerText = '+'
+    // находим все картоки
+    let card = document.querySelectorAll('.listClass')
+    // nodelist to array
+    let cardArray = Array.from(card)
+    // находим последнюю карточку
+    let lastArrayItem = cardArray.pop()
 
-    // getCardBody(id).className = 'list'
-
+    lastArrayItem.appendChild(plus)
     getCardBody(id).setAttribute('data-created', 'false')
 
 })
 
 //Слушатель нажатия на кнопку (удалить, сохранить, редактировать)
 notesList.addEventListener('click', function (e) {
-    // e.preventDefault();
-    // console.log('this is noteList event');
+
     // Обьявляем ай ди заметки
     let id = e.target.dataset.id
-    // console.log(id);
+    // удаление карточки
     if (e.target.classList.contains('btn-danger')) {
-        // console.log('delete')
         deleteNote(id)
+
+        // если есть кнопк сохранить
     } else if (e.target.classList.contains('save-btn')) {
-        // console.log('save')
         if (getCardBody(id).dataset.edit) {
             let parent = e.target.closest('.card-body');
 
+
             if (parent.classList.contains('listClass')) {
-                editNoteList(id)
+                editNoteList(id) //редактировать список
             } else {
-                editNote(id)
+                editNote(id) // редактировать карточку
             }
         } else {
             let parent = e.target.closest('.card-body');
@@ -57,13 +68,15 @@ notesList.addEventListener('click', function (e) {
                 createNote(id)
             }
         }
+
+        //если кнопка едит
     } else if (e.target.classList.contains('edit-btn')) {
 
         let parent = e.target.closest('.card-body');
 
         if (parent.classList.contains('listClass')) {
             let currentCol = getCol(id)
-            let newCol = getCardTemplateList(id, getTitleVal(id, false), getTextValListEdit(id, true), true);
+            let newCol = getCardTemplateList(id, getTitleVal(id, false), getTextValListEdit(id, false), true);
             currentCol.innerHTML = newCol.innerHTML
             getCardBody(id).setAttribute("data-edit", "true");
         } else {
@@ -72,9 +85,8 @@ notesList.addEventListener('click', function (e) {
             currentCol.innerHTML = newCol.innerHTML
             getCardBody(id).setAttribute("data-edit", "true");
         }
+        // роут на показ полной информации в карточках
     } else if (e.target.classList.contains('btn-show')) {
-
-        // window.location.href = `/${id}`
 
         let parent = e.target.closest('.card-body');
 
@@ -88,22 +100,6 @@ notesList.addEventListener('click', function (e) {
             }
         }
     }
-    // else if (e.target.classList.contains('edit')) {
-    //
-    //     let parent = e.target.closest('.card-body');
-    //
-    //     if (parent.classList.contains('listClass')) {
-    //         let currentCol = getCol(id)
-    //         let newCol = getCardTemplateList(id, getTitleVal(id, false), data, true);
-    //         currentCol.innerHTML = newCol.innerHTML
-    //         getCardBody(id).setAttribute("data-edit", "true");
-    //     } else {
-    //         let currentCol = getCol(id)
-    //         let newCol = getCardTemplate(id, getTitleVal(id, false), getTextVal(id, false), true);
-    //         currentCol.innerHTML = newCol.innerHTML
-    //         getCardBody(id).setAttribute("data-edit", "true");
-    //     }
-    // }
 })
 
 // Функция создания заметки
@@ -114,7 +110,6 @@ async function createNote(id) {
         title: getTitleVal(id, true),
         text: getTextVal(id, true)
     }
-    console.log(data)
     let req = await fetch("http://localhost:3000/create", {
         method: "POST",
         headers: {
@@ -124,7 +119,6 @@ async function createNote(id) {
     })
 
     let answer = await req.json()
-    console.log(answer)
     if (answer.created) {
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
@@ -146,8 +140,6 @@ async function createNoteList(id) {
         data[`text${i}`] = elem;
         i++;
     });
-    // console.log(data)
-    // data.inputCounter = i-1;
 
     let req = await fetch("http://localhost:3000/create", {
         method: "POST",
@@ -157,16 +149,16 @@ async function createNoteList(id) {
         body: JSON.stringify(data)
     })
     let answer = await req.json()
-    // console.log(answer)
+
     if (answer.created) {
         let currentCol = getCol(id)
         let newCol = getCardTemplateList(data.id, data.title, data, false)
-        // console.log(newCol);
 
         currentCol.innerHTML = newCol.innerHTML
     }
 }
 
+// редактировать карточку
 async function editNote(id) {
     let data = {
         id: id,
@@ -174,7 +166,7 @@ async function editNote(id) {
         title: getTitleVal(id, true),
         text: getTextVal(id, true)
     }
-    console.log(data)
+
     let req = await fetch("http://localhost:3000/editnote", {
         method: "POST",
         headers: {
@@ -184,7 +176,6 @@ async function editNote(id) {
     })
 
     let answer = await req.json()
-    console.log(answer)
     if (answer.edited) {
         let currentCol = getCol(id)
         let newCol = getCardTemplate(data.id, data.title, data.text, false)
@@ -192,21 +183,21 @@ async function editNote(id) {
     }
 }
 
+//редактировать список
 async function editNoteList(id) {
     let i = 1;
     let data = {
         id: id,
         type: 'list',
         title: getTitleVal(id, true)
-        // text: getTextValList(id, true)
     }
-    // console.log(getTextValList);
+
+
     getTextValListEdit(id, true).forEach((elem) => {
         data[`text${i}`] = elem;
         i++;
     });
-    // console.log(data)
-    data.inputCounter = i-1;
+    data.inputCounter = i - 1;
     let req = await fetch("http://localhost:3000/editlist", {
         method: "POST",
         headers: {
@@ -216,7 +207,6 @@ async function editNoteList(id) {
     })
 
     let answer = await req.json()
-    // console.log(answer)
     if (answer.edited) {
         let currentCol = getCol(id)
         let newCol = getCardTemplateList(data.id, data.title, data, false)
@@ -224,6 +214,7 @@ async function editNoteList(id) {
     }
 }
 
+//удаление списка и карточки
 async function deleteNote(id) {
     let data = {
         id: id
@@ -236,7 +227,6 @@ async function deleteNote(id) {
         body: JSON.stringify(data)
     })
     let answer = await req.json()
-    // console.log(answer)
 
     if (answer.deleted) {
         let currentCol = getCol(id)
@@ -244,9 +234,10 @@ async function deleteNote(id) {
     }
 }
 
-// функции для добавления карточек с заметками
+// функции для добавления карточи
 function getCardTemplate(id, title, text, editStatus) {
 
+    // елементы после сохранения/редактирования
     const inputElems = `
         <div class="form-group">
             <label for="note-title">Title</label>
@@ -256,23 +247,26 @@ function getCardTemplate(id, title, text, editStatus) {
             <label for="note-text">Text</label>
             <textarea class="form-control" id="note-text" rows="3" >${text}</textarea>
         </div>`
+
+    // елементы при редактировании/сохранении
     const textElems = `
             <h5 class="card-title">${title}</h5>
             <p class="card-text">${text}</p>`
 
-    console.log(`"card" ${text}`);
 
-    let submitBtn,
-        neededContentElems
+    let submitBtn
+    let neededContentElems
 
-    if (editStatus) {
+    if (editStatus) { // если тру положить кнопку сохранения
         submitBtn = `<button class="btn btn-primary save-btn" data-id="${id}">Save</button>`
         neededContentElems = inputElems
-    } else {
+    } else { // иначе положить кнопки для редактирования
         submitBtn = `<button class="btn btn-success edit-btn edit-btn-note" data-id="${id}">Edit</button>
                      <button class="btn btn-success btn-show" data-id="${id}">Show note</button>`
         neededContentElems = textElems
     }
+
+    // вид карточки
     const cardContainer = `
             <div class="card">
                 <div class="card-body bg-warning noteClass" data-id="${id}">
@@ -290,12 +284,11 @@ function getCardTemplate(id, title, text, editStatus) {
     return wrapper
 }
 
+// получаем title в карточках и списке
 function getTitleVal(id, editStatus) {
     const tag = editStatus ? "input" : "h5"
     const elem = document.querySelector(`.card-body[data-id="${id}"] ${tag}`)
 
-    // console.log(`'title is' ${elem.value}`);
-
     if (editStatus) {
         return elem.value
     } else {
@@ -303,10 +296,10 @@ function getTitleVal(id, editStatus) {
     }
 }
 
+// получаем text value в карточке
 function getTextVal(id, editStatus) {
     const tag = editStatus ? "textarea" : "p"
     const elem = document.querySelector(`.card-body[data-id="${id}"] ${tag}`)
-    console.log(elem);
 
     if (editStatus) {
         return elem.value
@@ -315,48 +308,56 @@ function getTextVal(id, editStatus) {
     }
 }
 
+// получаем value of inputs в списке для сохранения
 function getTextValListSave(id, editStatus) {
-    console.log('!!!!', editStatus);
+
     const tagList = editStatus ? ".input-inlist" : "p"
     const elemList = []
     const el = document.querySelectorAll(`.card-body[data-id="${id}"] ${tagList}`)
-    // elemList.push(el)
-
-    console.log(el);
 
     el.forEach(function (element) {
-        // console.log("this is " + element.value);
         let obj = {
             value: element.value,
             status: element.checked
         };
         elemList.push(obj);
     });
-    // console.log(elemList);
 
     return elemList
 }
 
+// получаем value of inputs в списке для редакции
 function getTextValListEdit(id, editStatus) {
-    console.log('!!!!', editStatus);
-    const tagList = editStatus ? "p" : ".input-inlist"
+
+    const tagList = editStatus ? ".input-list" : "p";
     const elemList = []
+    const elemListEdited = []
     const el = document.querySelectorAll(`.card-body[data-id="${id}"] ${tagList}`)
-    // elemList.push(el)
 
-    console.log(el);
+    if (!editStatus) { // в зависимости от статуса возвращаем разные объекты
+        el.forEach(function (element) {
+            let obj = {
+                value: element.textContent,
+                status: element.previousElementSibling.checked
+            };
+            elemList.push(obj);
+            editStatus = true
+        });
 
-    el.forEach(function (element) {
-        // console.log("this is " + element.value);
-        let obj = {
-            value: element.textContent,
-            status: element.previousElementSibling.checked
-        };
-        elemList.push(obj);
-    });
-    // console.log(elemList);
+        return elemList
 
-    return elemList
+    } else {
+        el.forEach(function (element) {
+            let obj = {
+                value: element.value
+                // status: element.checked
+            };
+            elemListEdited.push(obj);
+            // editStatus = false
+        });
+
+        return elemListEdited
+    }
 }
 
 function getCol(id) {
@@ -367,71 +368,62 @@ function getCardBody(id) {
     return document.querySelector(`.card-body[data-id="${id}"]`)
 }
 
-// функции для добавления карточек с заметками
+// функции для добавления списка
 function getCardTemplateList(id, title, text, editStatus) {
-    console.log(editStatus);
-    console.log("id", id);
-    console.log("title", title);
-    console.log('text', text);
+
+    // елементы после сохранения/редактирования
     let inputElems = `
 <div class="form-inline" id="listField">
             <div class="my-1 mr-2" >
                 <label for="note-title" style="color: dodgerblue; font-weight: bold; margin-left: 25px">Title</label>
                 <input type="text" class="form-control" id="note-title" value="${title}" style="margin-left: 25px">
-            </div>
-
-            <div class="custom-control custom-checkbox my-1 mr-sm-2" ></div>
-
-            <div class="custom-control custom-checkbox my-1 mr-sm-2" >
-
-                <input type="checkbox" class="custom-control-input" id="id0">
-                <label class="custom-control-label" for="id0">
-                    <!--<input class="form-control input-inlist" id = "inputText" data-set="set0" name="value[]" value="${text}">-->
-                    
-                    
-                    
-                    <button class="badge badge-primary"> - </button>
-                </label>
-            </div>
+            </div>        
 </div>`
-    for(let key in text){
-        if(key !== '_id' && key !== 'id' && key !== 'type' && key !== 'title'){
-            inputElems+=`<input class="card-text" value=${text[key].value}>`
+
+    for (let key in text) {
+        if (key !== '_id' && key !== 'id' && key !== 'type' && key !== 'title') {
+
+            inputElems += `
+            <div class="my-1 mr-2" >
+                <input type="checkbox" class="list-checkbox">
+                <input class="card-text input-list" value=${text[key].value}>
+                <button id="deleteEditInput" class="badge badge-primary"> - </button>
+            </div>`
         }
     }
 
-
+    // елементы при редактировании/сохранении
     let textElems = `
             <h5 class="card-title">${title}</h5>`
 
-
-
-    for(let key in text){
-        if(key !== '_id' && key !== 'id' && key !== 'type' && key !== 'title'){
-            textElems+=`<p class="card-text">${text[key].value}</p>`
-
+    for (let key in text) {
+        if (key !== '_id' && key !== 'id' && key !== 'type' && key !== 'title' && key !== 'inputCounter') {
+            textElems += `
+             <div class="my-1 mr-2" >
+                <input type="checkbox" class="list-checkbox">
+                <p class="card-text" style="display: inline-block; margin-left: 8px">${text[key].value}</p>
+             </div>`
         }
     }
-    // console.log(`"list" ${textElems}`);
 
     let submitBtn,
         neededContentElems;
-    console.log(editStatus);
 
     if (editStatus) {
+    // если тру положить кнопку сохранения
+        submitBtn = ` 
+            <button class="btn btn-primary save-btn" data-id="${id}" style="margin-left: 25px">Save</button>`
 
-        submitBtn = `<button class="btn btn-primary save-btn" data-id="${id}" style="margin-left: 25px">Save</button>
- <button class="badge badge-primary text-right" id="checkPlus" style="margin-left:100px; "> + </button> 
-`
         neededContentElems = inputElems;
 
-    } else {
+    } else { // иначе положить кнопки для редактирования
         submitBtn = `<button class="btn btn-success edit-btn edit-btn-list" data-id="${id}">Edit</button>
                      <button class="btn btn-success btn-show" data-id="${id}">Show list</button>`
 
         neededContentElems = textElems
-        // console.log(neededContentElems);
+
     }
+    // вид списка
     const cardContainer = `
             <div class="card">
                 <div class="card-body listClass" data-id="${id}">
@@ -453,32 +445,22 @@ function getCardTemplateList(id, title, text, editStatus) {
 
 }
 
-//добавление инпутов для заметок
+//добавление/удаление инпутов для заметок
 document.addEventListener('click', (event) => {
     let count = 1;
     if (event.target.id === 'checkPlus') {
         const parent = event.target.closest('.card');
 
-        // console.log(parent);
         const formInline = parent.querySelector('#listField')
-
-
-        // const formInline = document.getElementsByClassName('form-inline')
 
         const divForInputs = document.createElement('div')
         divForInputs.className = "custom-control custom-checkbox my-1 mr-sm-2"
 
         const checkbox = document.createElement('input')
         checkbox.type = 'checkbox'
-        // divForInputs.appendChild(checkbox)
         checkbox.className = 'custom-control-input'
-        // creatInput.style.position=' absolute '
-        // creatInput.style.zIndex= '1 '
-        // creatInput.style.opacity ='0 '
-        // creatInput.style.left = '2px'
-        // creatInput.style.top='6px'
+
         checkbox.name = 'value[]'
-        // checkbox.value = 'value'
         checkbox.id = 'id' + count
         divForInputs.appendChild(checkbox)
 
@@ -491,7 +473,6 @@ document.addEventListener('click', (event) => {
         input.className = "form-control input-inlist"
         input.type = 'text'
         input.setAttribute('data-set', 'set' + count)
-        // input.name = 'value[]'
 
         label.appendChild(input)
         divForInputs.appendChild(label)
@@ -509,6 +490,13 @@ document.addEventListener('click', (event) => {
                 label.remove()
             }
         })
+    }
+    //удаление ипунтов
+    if (event.target.id === 'deleteEditInput') {
+
+        const parent = event.target.closest('.my-1');
+
+        parent.remove()
     }
 
 })
